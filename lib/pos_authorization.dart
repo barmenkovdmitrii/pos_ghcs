@@ -223,3 +223,5 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
     );
   }
 }
+
+/* Форма в виджетами для ввода пароля на кассе*/
