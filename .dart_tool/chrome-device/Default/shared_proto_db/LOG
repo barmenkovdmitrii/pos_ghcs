@@ -1,3 +1,6 @@
-2024/10/14-18:35:43.870 6da8 Reusing MANIFEST C:\Users\Dima\AppData\Local\Temp\flutter_tools.f8693e1c\flutter_tools_chrome_device.ce24078a\Default\shared_proto_db/MANIFEST-000001
-2024/10/14-18:35:43.870 6da8 Recovering log #3
-2024/10/14-18:35:43.871 6da8 Reusing old log C:\Users\Dima\AppData\Local\Temp\flutter_tools.f8693e1c\flutter_tools_chrome_device.ce24078a\Default\shared_proto_db/000003.log 
+2024/10/15-11:58:29.814 6140 Reusing MANIFEST C:\Users\Dima\AppData\Local\Temp\flutter_tools.fd8759f1\flutter_tools_chrome_device.54f1eeb9\Default\shared_proto_db/MANIFEST-000001
+2024/10/15-11:58:29.814 6140 Recovering log #3
+2024/10/15-11:58:29.815 6140 Reusing old log C:\Users\Dima\AppData\Local\Temp\flutter_tools.fd8759f1\flutter_tools_chrome_device.54f1eeb9\Default\shared_proto_db/000003.log 
+2024/10/15-11:58:41.298 4180 Level-0 table #5: started
+2024/10/15-11:58:41.303 4180 Level-0 table #5: 134781 bytes OK
+2024/10/15-11:58:41.306 4180 Delete type=0 #3

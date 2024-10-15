@@ -63,8 +63,7 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
       setState(() {
         _controller.text += number.toString(); // Обновляем текст контроллера
         _controller.selection = TextSelection.fromPosition(
-          TextPosition(
-              offset: _controller.text.length), // Устанавливаем курсор в конец
+          TextPosition(offset: _controller.text.length), // Устанавливаем курсор в конец
         );
       });
     }
@@ -73,11 +72,9 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
   void _onDeletePressed() {
     setState(() {
       if (_controller.text.isNotEmpty) {
-        _controller.text = _controller.text.substring(
-            0, _controller.text.length - 1); // Удаляем последний символ
+        _controller.text = _controller.text.substring(0, _controller.text.length - 1); // Удаляем последний символ
         _controller.selection = TextSelection.fromPosition(
-          TextPosition(
-              offset: _controller.text.length), // Устанавливаем курсор в конец
+          TextPosition(offset: _controller.text.length), // Устанавливаем курсор в конец
         );
       }
     });
@@ -89,8 +86,7 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Пароль отправлен'),
-        content: Text(
-            'Введённый пароль: $enteredPassword'), // Используем введённый пароль
+        content: Text('Введённый пароль: $enteredPassword'), // Используем введённый пароль
         actions: [
           TextButton(
             onPressed: () {
@@ -115,8 +111,7 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
       appBar: AppBar(
         title: const Text('Цифровая клавиатура'),
         actions: [
-          if (screenWidth >=
-              400) // если размер экрана больше 400 прекратить масштабирование клавиатуры
+          if (screenWidth >= 400) // если размер экрана больше 400 прекратить масштабирование
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Center(
@@ -146,10 +141,16 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
                     border: OutlineInputBorder(),
                   ),
                   focusNode: _focusNode,
+                  onChanged: (value) {
+                    // Проверяем, содержит ли текст символ '?'
+                    if (value.contains('?')) {
+                      _onSubmitPressed(); // Исправлено: вызов метода
+                    }
+                  },
                   onSubmitted: (value) {
                     _onSubmitPressed();
                   },
-                  style: const TextStyle(fontSize: 24),
+                                    style: const TextStyle(fontSize: 24),
                 ),
               ),
             ),
