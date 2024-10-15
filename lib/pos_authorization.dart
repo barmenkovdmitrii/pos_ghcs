@@ -236,8 +236,8 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
 
 
 
-
 /* 
+
 Описание кода, который вы написали для приложения на Flutter с цифровой клавиатурой и полем ввода пароля:
 
 ### Описание кода
