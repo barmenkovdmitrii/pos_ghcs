@@ -180,9 +180,9 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
                         children: [
                           _buildNumberButton(0, buttonSize),
                           _buildActionButton(
-                              'Удалить', _onDeletePressed, buttonSize),
+                              Icons.backspace, _onDeletePressed, buttonSize),
                           _buildActionButton(
-                              'Ввод', _onSubmitPressed, buttonSize),
+                              Icons.check, _onSubmitPressed, buttonSize),
                         ],
                       ),
                     ],
@@ -219,7 +219,7 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
   }
 
   Widget _buildActionButton(
-      String label, VoidCallback onPressed, double buttonSize) {
+      IconData icon, VoidCallback onPressed, double buttonSize) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
@@ -227,14 +227,13 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
         style: ElevatedButton.styleFrom(
           fixedSize: Size(buttonSize, buttonSize),
         ),
-        child: Text(
-          label,
-          style: const TextStyle(fontSize: 24),
-        ),
+        child: Icon(icon, size: 24), // Отображаем только иконку
       ),
     );
   }
 }
+
+
 
 
 
@@ -301,3 +300,4 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
 Этот код представляет собой простое приложение на Flutter, которое позволяет пользователю вводить пароль с помощью цифровой клавиатуры. 
 Приложение также отображает текущее время и позволяет отправлять введённый пароль через диалоговое окно. Фокус на поле ввода сохраняется,
 даже если пользователь нажимает на другие области экрана, что улучшает взаимодействие с пользователем.
+*/
