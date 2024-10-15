@@ -37,7 +37,6 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
     _timer = Timer.periodic(
         const Duration(seconds: 1), (timer) => _updateDateTime());
 
-    // Устанавливаем фокус на поле ввода пароля после построения виджета
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_focusNode);
     });
@@ -53,18 +52,16 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
 
   void _updateDateTime() {
     setState(() {
-      _currentDateTime =
-          DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+      _currentDateTime = DateFormat('HH:mm:ss').format(DateTime.now());
     });
   }
 
   void _onNumberPressed(int number) {
     if (_controller.text.length < 6) {
       setState(() {
-        _controller.text += number.toString(); // Обновляем текст контроллера
+        _controller.text += number.toString();
         _controller.selection = TextSelection.fromPosition(
-          TextPosition(
-              offset: _controller.text.length), // Устанавливаем курсор в конец
+          TextPosition(offset: _controller.text.length),
         );
       });
     }
@@ -73,30 +70,28 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
   void _onDeletePressed() {
     setState(() {
       if (_controller.text.isNotEmpty) {
-        _controller.text = _controller.text.substring(
-            0, _controller.text.length - 1); // Удаляем последний символ
+        _controller.text =
+            _controller.text.substring(0, _controller.text.length - 1);
         _controller.selection = TextSelection.fromPosition(
-          TextPosition(
-              offset: _controller.text.length), // Устанавливаем курсор в конец
+          TextPosition(offset: _controller.text.length),
         );
       }
     });
   }
 
   void _onSubmitPressed() {
-    String enteredPassword = _controller.text; // Получаем текст из контроллера
+    String enteredPassword = _controller.text;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Пароль отправлен'),
-        content: Text(
-            'Введённый пароль: $enteredPassword'), // Используем введённый пароль
+        content: Text('Введённый пароль: $enteredPassword'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
               setState(() {
-                _controller.clear(); // Очищаем контроллер
+                _controller.clear();
               });
             },
             child: const Text('OK'),
@@ -113,84 +108,116 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
 
     return GestureDetector(
       onTap: () {
-        // Устанавливаем фокус на поле ввода при нажатии на любую область экрана
         FocusScope.of(context).requestFocus(_focusNode);
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Цифровая клавиатура'),
-          actions: [
-            if (screenWidth >=
-                400) // если размер экрана больше 400 прекратить масштабирование
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Center(
+        body: Column(
+          children: [
+            // Первая строка: номер сборки и часы
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                      'Номер сборки: 1.0.0'), // Замените на актуальный номер сборки
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
                   child: Text(
                     _currentDateTime,
                     style: const TextStyle(fontSize: 16),
                   ),
                 ),
-              ),
-          ],
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
+              ],
+            ),
+            // Вторая строка: название
+            Center(
+              child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: buttonSize * 3 * 1.1, // 80% от ширины трех кнопок
-                  height: 80,
-                  child: TextField(
-                    controller: _controller,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      hintText: 'Введите пароль',
-                      hintStyle: TextStyle(fontSize: 24),
-                      border: OutlineInputBorder(),
-                    ),
-                    focusNode: _focusNode,
-                    onChanged: (value) {
-                      // Проверяем, содержит ли текст символ '?'
-                      if (value.contains('?')) {
-                        _onSubmitPressed(); // Исправлено: вызов метода
-                      }
-                    },
-                    onSubmitted: (value) {
-                      _onSubmitPressed();
-                    },
-                    style: const TextStyle(fontSize: 24),
-                  ),
+                child: Text(
+                  'Цифровая клавиатура',
+                  style: const TextStyle(fontSize: 24),
                 ),
               ),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (int i = 1; i <= 9; i += 3)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: _buildNumberButtons(
-                              [i, i + 1, i + 2], buttonSize),
-                        ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _buildNumberButton(0, buttonSize),
-                          _buildActionButton(
-                              Icons.backspace, _onDeletePressed, buttonSize),
-                          _buildActionButton(
-                              Icons.check, _onSubmitPressed, buttonSize),
-                        ],
-                      ),
-                    ],
-                  );
-                },
+            ),
+            // Третья строка: надпись смена
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Смена',
+                  style: const TextStyle(fontSize: 24),
+                ),
               ),
-            ],
-          ),
+            ),
+            // Четвертая строка: поле ввода пароля и цифровая клавиатура
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: buttonSize * 3 * 1.1,
+                      height: 80,
+                      child: TextField(
+                        controller: _controller,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          hintText: 'Введите пароль',
+                          hintStyle: TextStyle(fontSize: 24),
+                          border: OutlineInputBorder(),
+                        ),
+                        focusNode: _focusNode,
+                        onChanged: (value) {
+                          if (value.contains('?')) {
+                            _onSubmitPressed();
+                          }
+                        },
+                        onSubmitted: (value) {
+                          _onSubmitPressed();
+                        },
+                        style: const TextStyle(fontSize: 24),
+                      ),
+                    ),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            for (int i = 1; i <= 9; i += 3)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: _buildNumberButtons(
+                                    [i, i + 1, i + 2], buttonSize),
+                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _buildNumberButton(0, buttonSize),
+                                _buildActionButton(Icons.backspace,
+                                    _onDeletePressed, buttonSize),
+                                _buildActionButton(
+                                    Icons.check, _onSubmitPressed, buttonSize),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // Пятая строка: копирайт
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                '© 2023 Ваше имя или компания',
+                style: const TextStyle(fontSize: 14),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -227,7 +254,7 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
         style: ElevatedButton.styleFrom(
           fixedSize: Size(buttonSize, buttonSize),
         ),
-        child: Icon(icon, size: 24), // Отображаем только иконку
+        child: Icon(icon, size: 24),
       ),
     );
   }
