@@ -49,12 +49,15 @@ class _MyFormState extends State<MyForm> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final firstRowHeight = screenHeight * 0.15;
+    final thirdRowHeight = screenHeight * 0.15;
+    final gridHeight = screenHeight * 0.70;
 
     return Column(
       children: [
         // Первая строка (15% высоты экрана)
         Container(
-          height: screenHeight * 0.15,
+          height: firstRowHeight,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -127,7 +130,7 @@ class _MyFormState extends State<MyForm> {
         ),
         // Вторая строка (70% высоты экрана)
         Container(
-          height: screenHeight * 0.70,
+          height: gridHeight,
           child: Row(
             children: [
               Expanded(
@@ -172,7 +175,7 @@ class _MyFormState extends State<MyForm> {
         ),
         // Третья строка (15% высоты экрана)
         Container(
-          height: screenHeight * 0.15,
+          height: thirdRowHeight,
           child: Row(
             children: [
               Expanded(
