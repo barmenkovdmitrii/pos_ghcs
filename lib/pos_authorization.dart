@@ -107,79 +107,85 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
     final double screenWidth = MediaQuery.of(context).size.width;
     double buttonSize = (screenWidth > 300) ? 80 : screenWidth / 4;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Цифровая клавиатура'),
-        actions: [
-          if (screenWidth >= 400) // если размер экрана больше 400 прекратить масштабирование
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Center(
-                child: Text(
-                  _currentDateTime,
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ),
-            ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SizedBox(
-                width: buttonSize * 3 * 1.1, // 80% от ширины трех кнопок
-                height: 80,
-                child: TextField(
-                  controller: _controller,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    hintText: 'Введите пароль',
-                    hintStyle: TextStyle(fontSize: 24),
-                    border: OutlineInputBorder(),
+    return GestureDetector(
+      onTap: () {
+        // Устанавливаем фокус на поле ввода при нажатии на любую область экрана
+        FocusScope.of(context).requestFocus(_focusNode);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Цифровая клавиатура'),
+          actions: [
+            if (screenWidth >= 400) // если размер экрана больше 400 прекратить масштабирование
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Center(
+                  child: Text(
+                    _currentDateTime,
+                    style: const TextStyle(fontSize: 16),
                   ),
-                  focusNode: _focusNode,
-                  onChanged: (value) {
-                    // Проверяем, содержит ли текст символ '?'
-                    if (value.contains('?')) {
-                      _onSubmitPressed(); // Исправлено: вызов метода
-                    }
-                  },
-                  onSubmitted: (value) {
-                    _onSubmitPressed();
-                  },
-                                    style: const TextStyle(fontSize: 24),
                 ),
               ),
-            ),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (int i = 1; i <= 9; i += 3)
+          ],
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SizedBox(
+                  width: buttonSize * 3 * 1.1, // 80% от ширины трех кнопок
+                  height: 80,
+                  child: TextField(
+                    controller: _controller,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      hintText: 'Введите пароль',
+                                            hintStyle: TextStyle(fontSize: 24),
+                      border: OutlineInputBorder(),
+                    ),
+                    focusNode: _focusNode,
+                    onChanged: (value) {
+                      // Проверяем, содержит ли текст символ '?'
+                      if (value.contains('?')) {
+                        _onSubmitPressed(); // Исправлено: вызов метода
+                      }
+                    },
+                    onSubmitted: (value) {
+                      _onSubmitPressed();
+                    },
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                ),
+              ),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (int i = 1; i <= 9; i += 3)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children:
+                              _buildNumberButtons([i, i + 1, i + 2], buttonSize),
+                        ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children:
-                            _buildNumberButtons([i, i + 1, i + 2], buttonSize),
+                        children: [
+                          _buildNumberButton(0, buttonSize),
+                          _buildActionButton(
+                              'Удалить', _onDeletePressed, buttonSize),
+                          _buildActionButton(
+                              'Ввод', _onSubmitPressed, buttonSize),
+                        ],
                       ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildNumberButton(0, buttonSize),
-                        _buildActionButton(
-                            'Удалить', _onDeletePressed, buttonSize),
-                        _buildActionButton(
-                            'Ввод', _onSubmitPressed, buttonSize),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            ),
-          ],
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -224,5 +230,7 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
     );
   }
 }
+
+
 
 /* Форма в виджетами для ввода пароля на кассе*/
