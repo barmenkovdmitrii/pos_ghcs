@@ -113,44 +113,47 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
       child: Scaffold(
         body: Column(
           children: [
-            // Первая строка: номер сборки и часы
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
+            // Проверяем ширину экрана
+            if (screenWidth >= 650) ...[
+              // Первая строка: номер сборки и часы
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                        'Номер сборки: 1.0.0'), // Замените на актуальный номер сборки
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      _currentDateTime,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+              // Вторая строка: название
+              Center(
+                child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                      'Номер сборки: 1.0.0'), // Замените на актуальный номер сборки
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    _currentDateTime,
-                    style: const TextStyle(fontSize: 16),
+                    'Цифровая клавиатура',
+                    style: const TextStyle(fontSize: 24),
                   ),
                 ),
-              ],
-            ),
-            // Вторая строка: название
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Цифровая клавиатура',
-                  style: const TextStyle(fontSize: 24),
+              ),
+              // Третья строка: надпись смена
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Смена',
+                    style: const TextStyle(fontSize: 24),
+                  ),
                 ),
               ),
-            ),
-            // Третья строка: надпись смена
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Смена',
-                  style: const TextStyle(fontSize: 24),
-                ),
-              ),
-            ),
+            ],
             // Четвертая строка: поле ввода пароля и цифровая клавиатура
             Expanded(
               child: Center(
