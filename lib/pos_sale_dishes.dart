@@ -10,217 +10,196 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: MyForm(),
+        body: Column(
+          children: [
+            // Первая строка (10% высоты экрана)
+            Container(
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: Row(
+                children: [
+                  Expanded(child: Container()), // Первая колонка
+                  Expanded(
+                    child: Center(
+                      child: TimeDisplay(), // Вторая колонка с часами
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {}, child: Text('Кнопка 1')),
+                        ElevatedButton(
+                            onPressed: () {}, child: Text('Кнопка 2')),
+                        ElevatedButton(
+                            onPressed: () {}, child: Text('Кнопка 3')),
+                      ],
+                    ),
+                  ), // Третья колонка с кнопками
+                ],
+              ),
+            ),
+            // Вторая строка (75% высоты экрана)
+            Container(
+              height: MediaQuery.of(context).size.height * 0.75,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(), // Первый столбец (1/3)
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 6, // Количество колонок
+                        childAspectRatio: 1, // Соотношение сторон
+                      ),
+                      itemCount: 36, // Общее количество кнопок
+                      itemBuilder: (context, index) {
+                        return CustomButton(
+                          title: 'Кнопка ${index + 1}',
+                          number: '${index + 1}',
+                          price: '\${(index + 1) * 10}.00', // Исправлено
+                        );
+                      },
+                    ),
+                  ), // Второй столбец (2/3) с полем 6x6
+                ],
+              ),
+            ),
+            // Третья строка (15% высоты экрана)
+            Container(
+              height: MediaQuery.of(context).size.height * 0.15,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {}, child: Text('Кнопка A')),
+                        ElevatedButton(
+                            onPressed: () {}, child: Text('Кнопка B')),
+                      ],
+                    ),
+                  ), // Первый столбец с двумя кнопками
+                  Expanded(
+                    flex: 2,
+                    child: Container(), // Второй столбец (2/3)
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class MyForm extends StatefulWidget {
+class TimeDisplay extends StatefulWidget {
   @override
-  _MyFormState createState() => _MyFormState();
+  _TimeDisplayState createState() => _TimeDisplayState();
 }
 
-class _MyFormState extends State<MyForm> {
-  String _currentTime = '';
-  Timer? _timer;
+class _TimeDisplayState extends State<TimeDisplay> {
+  String _timeString = "";
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     _updateTime();
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      _updateTime();
-    });
+    Timer.periodic(Duration(seconds: 1), (Timer t) => _updateTime());
   }
 
   void _updateTime() {
     setState(() {
-      _currentTime = TimeOfDay.now().format(context);
+      final now = DateTime.now();
+      _timeString =
+          "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}";
     });
   }
 
   @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return Text(
+      _timeString,
+      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    );
   }
+}
+
+class CustomButton extends StatelessWidget {
+  final String title;
+  final String number;
+  final String price;
+
+  CustomButton(
+      {required this.title, required this.number, required this.price});
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final firstRowHeight = screenHeight * 0.15;
-    final thirdRowHeight = screenHeight * 0.15;
-    final gridHeight = screenHeight * 0.70;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double buttonHeight = constraints.maxHeight;
 
-    return Column(
-      children: [
-        // Первая строка (15% высоты экрана)
-        Container(
-          height: firstRowHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Название точки'),
-                    Text('Имя кассира'),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Center(
+        double titleFontSize = buttonHeight * 0.15;
+        double numberFontSize = buttonHeight * 0.1;
+        double priceFontSize = buttonHeight * 0.1;
+
+        return GestureDetector(
+          onTap: () {
+            print('$title нажата');
+          },
+          child: Container(
+            margin: EdgeInsets.all(4.0), // Отступы между кнопками
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 10,
+                  left: 10,
                   child: Text(
-                    _currentTime,
-                    style: TextStyle(fontSize: 24),
+                    title,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: titleFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // Кнопки в первой строке
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Действие для первой кнопки
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                        ),
-                        child: Text('Кнопка 1'),
-                      ),
+                Positioned(
+                  bottom: 10,
+                  left: 10,
+                  child: Text(
+                    number,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: numberFontSize,
                     ),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Действие для второй кнопки
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                        ),
-                        child: Text('Кнопка 2'),
-                      ),
-                    ),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Действие для третьей кнопки
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                        ),
-                        child: Text('Кнопка 3'),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+                Positioned(
+                  bottom: 10,
+                  right: 10,
+                  child: Text(
+                    price,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: priceFontSize,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        // Вторая строка (70% высоты экрана)
-        Container(
-          height: gridHeight,
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                  color: Colors.grey[300],
-                  child: Center(
-                    child: Text('Первый столбец'),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Container(
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 6,
-                      childAspectRatio: 1.0,
-                    ),
-                    itemCount: 36,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: EdgeInsets.all(4.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Действие для кнопки
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero,
-                            ),
-                          ),
-                          child: Text('Кнопка ${index + 1}'),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        // Третья строка (15% высоты экрана)
-        Container(
-          height: thirdRowHeight,
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        // Действие для первой кнопки в третьем столбце
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero,
-                        ),
-                      ),
-                      child: Text('Кнопка A'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Действие для второй кнопки в третьем столбце
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero,
-                        ),
-                      ),
-                      child: Text('Кнопка B'),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Container(
-                  color: Colors.grey[200], // Цвет фона для второго столбца
-                  child: Center(
-                    child: Text('Второй столбец'),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
