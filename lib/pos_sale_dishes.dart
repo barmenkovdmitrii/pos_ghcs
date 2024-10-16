@@ -4,7 +4,14 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  List<String> records = []; // Список для хранения записей
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,9 +28,9 @@ class MyApp extends StatelessWidget {
             double thirdRowHeight = screenHeight * 0.15;
 
             // Высота кнопок (70% высоты экрана, делённая на 6)
-            double buttonHeight = (screenHeight * 0.70) / 6;
+            double buttonHeight = (screenHeight * 0.71) / 6;
 
-            // Ширина кнопок (65% от ширины экрана, делённая на 6)
+            // Ширина кнопов (65% от ширины экрана, делённая на 6)
             double buttonWidth = screenWidth * 0.63 / 6;
 
             return Column(
@@ -68,16 +75,43 @@ class MyApp extends StatelessWidget {
                       child: Container(
                         height: secondRowHeight,
                         color: Colors.orange,
-                        child: Center(
-                            child: Text('1/3',
-                                style: TextStyle(color: Colors.white))),
+                        child: ListView.builder(
+                          itemCount: records.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(records[index]),
+                              subtitle: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                        hintText: 'Введите текст...',
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.delete, color: Colors.red),
+                                    onPressed: () {
+                                      // Удаляем запись из списка при нажатии на кнопку
+                                      setState(() {
+                                        records.removeAt(index);
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                     Expanded(
                       flex: 2,
                       child: Container(
                         height: secondRowHeight,
-                        color: Colors.white,
+                        color: Colors.purple,
                         child: GridView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           gridDelegate:
@@ -92,6 +126,12 @@ class MyApp extends StatelessWidget {
                               title: 'Кнопка ${index + 1}',
                               number: '${index + 1}',
                               price: '\${(index + 1) * 10}.00',
+                              onPressed: () {
+                                // Добавляем запись в список при нажатии на кнопку
+                                setState(() {
+                                  records.add('Кнопка ${index + 1}');
+                                });
+                              },
                             );
                           },
                         ),
@@ -136,14 +176,18 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/* Создаем custom кнопку Описываем цвет, отступ и т.д.) */
 class CustomButton extends StatelessWidget {
   final String title;
   final String number;
   final String price;
+  final VoidCallback onPressed; // Добавляем колбек для нажатия
 
-  CustomButton(
-      {required this.title, required this.number, required this.price});
+  CustomButton({
+    required this.title,
+    required this.number,
+    required this.price,
+    required this.onPressed, // Инициализируем колбек
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -153,15 +197,12 @@ class CustomButton extends StatelessWidget {
         double buttonHeight = constraints.maxHeight; // Высота кнопки
 
         // Вычисляем размер шрифта в зависимости от высоты кнопки
-        double titleFontSize = buttonHeight * 0.1; // 10% от высоты кнопки
+        double titleFontSize = buttonHeight * 0.15; // 15% от высоты кнопки
         double numberFontSize = buttonHeight * 0.1; // 10% от высоты кнопки
         double priceFontSize = buttonHeight * 0.1; // 10% от высоты кнопки
 
         return GestureDetector(
-          onTap: () {
-            // Действие при нажатии на кнопку
-            print('$title нажата');
-          },
+          onTap: onPressed, // Вызываем колбек при нажатии
           child: Container(
             margin: EdgeInsets.all(4.0), // Отступы между кнопками
             decoration: BoxDecoration(
