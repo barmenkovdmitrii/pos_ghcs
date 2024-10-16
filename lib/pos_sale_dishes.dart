@@ -9,9 +9,58 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  List<Map<String, dynamic>> records =
-      []; // Список для хранения записей в виде Map
+class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
+  List<List<Map<String, dynamic>>> records = [
+    []
+  ]; // Список для хранения записей для каждой вкладки
+  late TabController _tabController; // Контроллер для вкладок
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+        length: 1, vsync: this); // Инициализация контроллера с одной вкладкой
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose(); // Освобождение ресурсов контроллера
+    super.dispose();
+  }
+
+  void _addRecord(String title, String price) {
+    setState(() {
+      int currentIndex =
+          _tabController.index; // Получаем индекс текущей вкладки
+
+      // Проверяем, существует ли уже запись для нажатой кнопки
+      int existingIndex = records[currentIndex]
+          .indexWhere((record) => record['title'] == title);
+      if (existingIndex != -1) {
+        // Если запись существует, увеличиваем количество нажатий
+        records[currentIndex][existingIndex]['count']++;
+      } else {
+        // Проверяем, нужно ли добавить новую вкладку
+        if (records[currentIndex].length >= 4) {
+          // Если в текущей вкладке 4 записи, создаем новую вкладку
+          records.add([]); // Добавляем новый список для новой вкладки
+          _tabController =
+              TabController(length: _tabController.length + 1, vsync: this);
+          _tabController.index =
+              _tabController.length - 1; // Переключаем фокус на новую вкладку
+          currentIndex =
+              _tabController.index; // Обновляем текущий индекс на новую вкладку
+        }
+
+        // Добавляем новую запись в текущую или новую вкладку
+        records[currentIndex].add({
+          'title': title,
+          'price': price,
+          'count': 1, // Начальное количество нажатий
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,19 +68,14 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         body: LayoutBuilder(
           builder: (context, constraints) {
-            // Получаем высоту и ширину экрана
             double screenHeight = MediaQuery.of(context).size.height;
             double screenWidth = MediaQuery.of(context).size.width;
 
-            // Высота строк
             double firstRowHeight = screenHeight * 0.10;
             double secondRowHeight = screenHeight * 0.75;
             double thirdRowHeight = screenHeight * 0.15;
 
-            // Высота кнопок (70% высоты экрана, делённая на 6)
             double buttonHeight = (screenHeight * 0.71) / 6;
-
-            // Ширина кнопов (65% от ширины экрана, делённая на 6)
             double buttonWidth = screenWidth * 0.63 / 6;
 
             return Column(
@@ -68,7 +112,7 @@ class _MyAppState extends State<MyApp> {
                     ),
                   ],
                 ),
-                // Вторая строка
+                // Вторая строка с вкладками
                 Row(
                   children: [
                     Expanded(
@@ -76,47 +120,46 @@ class _MyAppState extends State<MyApp> {
                       child: Container(
                         height: secondRowHeight,
                         color: Colors.orange,
-                        child: ListView.builder(
-                          itemCount: records.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text('Кнопка: ${records[index]['title']}'),
-                              subtitle: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                      child: Text(
-                                          'Номер: ${records[index]['number']}',
-                                          overflow: TextOverflow.ellipsis)),
-                                  Expanded(
-                                      child: Text(
-                                          'Цена: ${records[index]['price']}',
-                                          overflow: TextOverflow.ellipsis)),
-                                  Row(
-                                    children: [
-                                      // Замените изображение на текст
-                                      Text('X',
-                                          style: TextStyle(
-                                              color: Colors.red, fontSize: 20)),
-                                      SizedBox(width: 4),
-                                      Text(
-                                          '${records[index]['count']}'), // Количество нажатий
-                                    ],
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.delete, color: Colors.red),
-                                    onPressed: () {
-                                      // Удаляем запись из списка при нажатии на кнопку
-                                      setState(() {
-                                        records.removeAt(index);
-                                      });
+                        child: Column(
+                          children: [
+                            TabBar(
+                              controller: _tabController,
+                              isScrollable: true,
+                              tabs:
+                                  List.generate(_tabController.length, (index) {
+                                return Tab(text: 'Вкладка ${index + 1}');
+                              }),
+                            ),
+                            Expanded(
+                              child: TabBarView(
+                                controller: _tabController,
+                                children: List.generate(_tabController.length,
+                                    (index) {
+                                  return ListView.builder(
+                                    itemCount: records[index].length,
+                                    itemBuilder: (context, recordIndex) {
+                                      return ListTile(
+                                        title: Text(
+                                            'Кнопка: ${records[index][recordIndex]['title']}'),
+                                        subtitle: Text(
+                                            'Цена: ${records[index][recordIndex]['price']}, Количество: ${records[index][recordIndex]['count']}'),
+                                        trailing: IconButton(
+                                          icon: Icon(Icons.delete,
+                                              color: Colors.red),
+                                          onPressed: () {
+                                            setState(() {
+                                              records[index]
+                                                  .removeAt(recordIndex);
+                                            });
+                                          },
+                                        ),
+                                      );
                                     },
-                                  ),
-                                ],
+                                  );
+                                }),
                               ),
-                            );
-                          },
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -137,31 +180,13 @@ class _MyAppState extends State<MyApp> {
                           itemBuilder: (context, index) {
                             return CustomButton(
                               title: 'Кнопка ${index + 1}',
-                              number: '${index + 1}',
-                              price: '\${(index + 1) * 10}.00',
+                              price: '${(index + 1) * 3}.00',
+                              weight:
+                                  '${(index + 1) * 0.5} кг', // Добавляем вес
                               onPressed: () {
-                                // Проверяем, существует ли уже запись для нажатой кнопки
-                                int existingIndex = records.indexWhere(
-                                    (record) =>
-                                        record['title'] ==
-                                        'Кнопка ${index + 1}');
-                                if (existingIndex != -1) {
-                                  // Если запись существует, увеличиваем количество нажатий
-                                  setState(() {
-                                    records[existingIndex]['count']++;
-                                  });
-                                } else {
-                                  // Если записи нет, добавляем новую запись
-                                  setState(() {
-                                    records.add({
-                                      'title': 'Кнопка ${index + 1}',
-                                      'number': '${index + 1}',
-                                      'price': '\${(index + 1) * 10}.00',
-                                      'count':
-                                          1, // Начальное количество нажатий
-                                    });
-                                  });
-                                }
+                                // Добавляем запись при нажатии на кнопку
+                                _addRecord('Кнопка ${index + 1}',
+                                    '${(index + 1) * 3}.00');
                               },
                             );
                           },
@@ -209,14 +234,14 @@ class _MyAppState extends State<MyApp> {
 
 class CustomButton extends StatelessWidget {
   final String title;
-  final String number;
   final String price;
+  final String weight; // Добавляем параметр для веса
   final VoidCallback onPressed; // Добавляем колбек для нажатия
 
   CustomButton({
     required this.title,
-    required this.number,
     required this.price,
+    required this.weight, // Инициализируем параметр веса
     required this.onPressed, // Инициализируем колбек
   });
 
@@ -228,9 +253,9 @@ class CustomButton extends StatelessWidget {
         double buttonHeight = constraints.maxHeight; // Высота кнопки
 
         // Вычисляем размер шрифта в зависимости от высоты кнопки
-        double titleFontSize = buttonHeight * 0.15; // 15% от высоты кнопки
-        double numberFontSize = buttonHeight * 0.1; // 10% от высоты кнопки
+        double titleFontSize = buttonHeight * 0.15;
         double priceFontSize = buttonHeight * 0.1; // 10% от высоты кнопки
+        double weightFontSize = buttonHeight * 0.1; // 10% от высоты кнопки
 
         return GestureDetector(
           onTap: onPressed, // Вызываем колбек при нажатии
@@ -264,10 +289,10 @@ class CustomButton extends StatelessWidget {
                   bottom: 10,
                   left: 10,
                   child: Text(
-                    number,
+                    weight, // Отображаем вес
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: numberFontSize,
+                      fontSize: weightFontSize,
                     ),
                   ),
                 ),
