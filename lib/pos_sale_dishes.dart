@@ -270,7 +270,7 @@ class CustomButton extends StatelessWidget {
         double buttonHeight = constraints.maxHeight; // Высота кнопки
 
         // Вычисляем размер шрифта в зависимости от высоты кнопки
-        double titleFontSize = buttonHeight * 0.15;
+        double titleFontSize = buttonHeight * 0.15; // 15% от высоты кнопки
         double priceFontSize = buttonHeight * 0.1; // 10% от высоты кнопки
         double weightFontSize = buttonHeight * 0.1; // 10% от высоты кнопки
 
