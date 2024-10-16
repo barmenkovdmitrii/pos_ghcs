@@ -62,6 +62,25 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     });
   }
 
+  void _removeRecord(int index, int recordIndex) {
+    setState(() {
+      records[index].removeAt(recordIndex);
+
+      // Проверяем, если вкладка пустая, удаляем её
+      if (records[index].isEmpty) {
+        records.removeAt(index);
+        if (_tabController.length > 1) {
+          _tabController =
+              TabController(length: _tabController.length - 1, vsync: this);
+          if (_tabController.index >= index) {
+            _tabController.index =
+                _tabController.index > 0 ? _tabController.index - 1 : 0;
+          }
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -147,10 +166,8 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                                           icon: Icon(Icons.delete,
                                               color: Colors.red),
                                           onPressed: () {
-                                            setState(() {
-                                              records[index]
-                                                  .removeAt(recordIndex);
-                                            });
+                                            _removeRecord(index,
+                                                recordIndex); // Используем новый метод для удаления
                                           },
                                         ),
                                       );
