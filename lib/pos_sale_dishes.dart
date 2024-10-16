@@ -10,7 +10,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<String> records = []; // Список для хранения записей
+  List<Map<String, dynamic>> records =
+      []; // Список для хранения записей в виде Map
 
   @override
   Widget build(BuildContext context) {
@@ -79,17 +80,29 @@ class _MyAppState extends State<MyApp> {
                           itemCount: records.length,
                           itemBuilder: (context, index) {
                             return ListTile(
-                              title: Text(records[index]),
+                              title: Text('Кнопка: ${records[index]['title']}'),
                               subtitle: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                        hintText: 'Введите текст...',
-                                      ),
-                                    ),
+                                      child: Text(
+                                          'Номер: ${records[index]['number']}',
+                                          overflow: TextOverflow.ellipsis)),
+                                  Expanded(
+                                      child: Text(
+                                          'Цена: ${records[index]['price']}',
+                                          overflow: TextOverflow.ellipsis)),
+                                  Row(
+                                    children: [
+                                      // Замените изображение на текст
+                                      Text('X',
+                                          style: TextStyle(
+                                              color: Colors.red, fontSize: 20)),
+                                      SizedBox(width: 4),
+                                      Text(
+                                          '${records[index]['count']}'), // Количество нажатий
+                                    ],
                                   ),
                                   IconButton(
                                     icon: Icon(Icons.delete, color: Colors.red),
@@ -127,10 +140,28 @@ class _MyAppState extends State<MyApp> {
                               number: '${index + 1}',
                               price: '\${(index + 1) * 10}.00',
                               onPressed: () {
-                                // Добавляем запись в список при нажатии на кнопку
-                                setState(() {
-                                  records.add('Кнопка ${index + 1}');
-                                });
+                                // Проверяем, существует ли уже запись для нажатой кнопки
+                                int existingIndex = records.indexWhere(
+                                    (record) =>
+                                        record['title'] ==
+                                        'Кнопка ${index + 1}');
+                                if (existingIndex != -1) {
+                                  // Если запись существует, увеличиваем количество нажатий
+                                  setState(() {
+                                    records[existingIndex]['count']++;
+                                  });
+                                } else {
+                                  // Если записи нет, добавляем новую запись
+                                  setState(() {
+                                    records.add({
+                                      'title': 'Кнопка ${index + 1}',
+                                      'number': '${index + 1}',
+                                      'price': '\${(index + 1) * 10}.00',
+                                      'count':
+                                          1, // Начальное количество нажатий
+                                    });
+                                  });
+                                }
                               },
                             );
                           },
