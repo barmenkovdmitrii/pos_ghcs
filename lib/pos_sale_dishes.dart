@@ -11,53 +11,61 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   List<List<Map<String, dynamic>>> records = [
-    []
+    [],
+    [] // Добавляем новую вкладку
   ]; // Список для хранения записей для каждой вкладки
   late TabController _tabController; // Контроллер для вкладок
+  late TabController _buttonTabController; // Контроллер для вкладок кнопок
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(
-        length: 1, vsync: this); // Инициализация контроллера с одной вкладкой
+        length: records.length,
+        vsync: this); // Инициализация контроллера с двумя вкладками
+    _buttonTabController =
+        TabController(length: 2, vsync: this); // Контроллер для кнопок
   }
 
   @override
   void dispose() {
     _tabController.dispose(); // Освобождение ресурсов контроллера
+    _buttonTabController.dispose(); // Освобождение ресурсов контроллера кнопок
     super.dispose();
   }
 
-void _addRecord(String title, String price) {
-  setState(() {
-    int currentIndex = _tabController.index; // Получаем индекс текущей вкладки
+  void _addRecord(String title, String price) {
+    setState(() {
+      int currentIndex =
+          _tabController.index; // Получаем индекс текущей вкладки
 
-    // Проверяем, существует ли уже запись для нажатой кнопки
-    int existingIndex = records[currentIndex]
-        .indexWhere((record) => record['title'] == title);
-    if (existingIndex != -1) {
-      // Если запись существует, увеличиваем количество нажатий
-      records[currentIndex][existingIndex]['count']++;
-    } else {
-      // Проверяем, нужно ли добавить новую вкладку
-      if (records[currentIndex].length >= 4) {
-        // Если в текущей вкладке 4 записи, создаем новую вкладку
-        records.add([]); // Добавляем новый список для новой вкладки
-        _tabController = TabController(length: _tabController.length + 1, vsync: this);
+      // Проверяем, существует ли уже запись для нажатой кнопки
+      int existingIndex = records[currentIndex]
+          .indexWhere((record) => record['title'] == title);
+      if (existingIndex != -1) {
+        // Если запись существует, увеличиваем количество нажатий
+        records[currentIndex][existingIndex]['count']++;
+      } else {
+        // Проверяем, нужно ли добавить новую вкладку
+        if (records[currentIndex].length >= 4) {
+          // Если в текущей вкладке 4 записи, создаем новую вкладку
+          records.add([]); // Добавляем новый список для новой вкладки
+          _tabController =
+              TabController(length: _tabController.length + 1, vsync: this);
+        }
+
+        // Добавляем новую запись в текущую или новую вкладку
+        records[currentIndex].add({
+          'title': title,
+          'price': price,
+          'count': 1, // Начальное количество нажатий
+        });
       }
 
-      // Добавляем новую запись в текущую или новую вкладку
-      records[_tabController.length - 1].add({
-        'title': title,
-        'price': price,
-        'count': 1, // Начальное количество нажатий
-      });
-    }
-
-    // Устанавливаем фокус на последнюю вкладку
-    _tabController.index = _tabController.length - 1;
-  });
-}
+      // Устанавливаем фокус на последнюю вкладку
+      _tabController.index = _tabController.length - 1;
+    });
+  }
 
   void _removeRecord(int index, int recordIndex) {
     setState(() {
@@ -67,9 +75,11 @@ void _addRecord(String title, String price) {
       if (records[index].isEmpty) {
         records.removeAt(index);
         if (_tabController.length > 1) {
-          _tabController = TabController(length: _tabController.length - 1, vsync: this);
+          _tabController =
+              TabController(length: _tabController.length - 1, vsync: this);
           if (_tabController.index >= index) {
-            _tabController.index = _tabController.index > 0 ? _tabController.index - 1 : 0;
+            _tabController.index =
+                _tabController.index > 0 ? _tabController.index - 1 : 0;
           }
         }
       }
@@ -139,14 +149,16 @@ void _addRecord(String title, String price) {
                             TabBar(
                               controller: _tabController,
                               isScrollable: true,
-                                                           tabs: List.generate(_tabController.length, (index) {
+                              tabs:
+                                  List.generate(_tabController.length, (index) {
                                 return Tab(text: 'Вкладка ${index + 1}');
                               }),
                             ),
                             Expanded(
                               child: TabBarView(
                                 controller: _tabController,
-                                children: List.generate(_tabController.length, (index) {
+                                children: List.generate(_tabController.length,
+                                    (index) {
                                   return ListView.builder(
                                     itemCount: records[index].length,
                                     itemBuilder: (context, recordIndex) {
@@ -156,9 +168,10 @@ void _addRecord(String title, String price) {
                                         subtitle: Text(
                                             'Цена: ${records[index][recordIndex]['price']}, Количество: ${records[index][recordIndex]['count']}'),
                                         trailing: IconButton(
-                                          icon: Icon(Icons.delete, color: Colors.red),
+                                          icon: Icon(Icons.delete,
+                                              color: Colors.red),
                                           onPressed: () {
-                                            _removeRecord(index, recordIndex); // Используем новый метод для удаления
+                                            _removeRecord(index, recordIndex);
                                           },
                                         ),
                                       );
@@ -176,29 +189,75 @@ void _addRecord(String title, String price) {
                       child: Container(
                         height: secondRowHeight,
                         color: Colors.purple,
-                        child: GridView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 6, // Количество кнопок в строке
-                            childAspectRatio: buttonWidth / buttonHeight, // Соотношение сторон
-                          ),
-                          itemCount: 36,
-                         itemBuilder: (context, index) {
-  return CustomButton(
-    title: 'Кнопка ${index + 1}',
-    price: '${(index + 1) * 3}.00',
-    weight: '${(index + 1) * 0.5} кг', // Добавляем вес
-    onPressed: () {
-      // Устанавливаем фокус на последнюю вкладку
-      setState(() {
-        _tabController.index = _tabController.length - 1;
-      });
-      // Добавляем запись при нажатии на кнопку
-      _addRecord('Кнопка ${index + 1}', '${(index + 1) * 3}.00');
-    },
-  );
-}
-
+                        child: Column(
+                          children: [
+                            TabBar(
+                              controller: _buttonTabController,
+                              tabs: [
+                                Tab(text: 'Кнопки 1'),
+                                Tab(text: 'Кнопки 2'),
+                              ],
+                            ),
+                            Expanded(
+                              child: TabBarView(
+                                controller: _buttonTabController,
+                                children: [
+                                  GridView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount:
+                                          6, // Количество кнопок в строке
+                                      childAspectRatio: buttonWidth /
+                                          buttonHeight, // Соотношение сторон
+                                    ),
+                                    itemCount: 36,
+                                    itemBuilder: (context, index) {
+                                      int buttonIndex =
+                                          index + 1; // Индекс кнопки
+                                      return CustomButton(
+                                        title: 'Кнопка $buttonIndex',
+                                        price: '${buttonIndex * 3}.00',
+                                        weight:
+                                            '${buttonIndex * 0.5} кг', // Добавляем вес
+                                        onPressed: () {
+                                          // Добавляем запись при нажатии на кнопку
+                                          _addRecord('Кнопка $buttonIndex',
+                                              '${buttonIndex * 3}.00');
+                                        },
+                                      );
+                                    },
+                                  ),
+                                  GridView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount:
+                                          6, // Количество кнопок в строке
+                                      childAspectRatio: buttonWidth /
+                                          buttonHeight, // Соотношение сторон
+                                    ),
+                                    itemCount: 36,
+                                    itemBuilder: (context, index) {
+                                      int buttonIndex = index +
+                                          37; // Индекс кнопки для второй вкладки
+                                      return CustomButton(
+                                        title: 'Кнопка $buttonIndex',
+                                        price: '${buttonIndex * 3}.00',
+                                        weight:
+                                            '${buttonIndex * 0.5} кг', // Добавляем вес
+                                        onPressed: () {
+                                          // Добавляем запись при нажатии на кнопку
+                                          _addRecord('Кнопка $buttonIndex',
+                                              '${buttonIndex * 3}.00');
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -262,7 +321,7 @@ class CustomButton extends StatelessWidget {
         double buttonHeight = constraints.maxHeight; // Высота кнопки
 
         // Вычисляем размер шрифта в зависимости от высоты кнопки
-        double titleFontSize = buttonHeight * 0.15;
+        double titleFontSize = buttonHeight * 0.15; // 15% от высоты кнопки
         double priceFontSize = buttonHeight * 0.1; // 10% от высоты кнопки
         double weightFontSize = buttonHeight * 0.1; // 10% от высоты кнопки
 
@@ -280,7 +339,8 @@ class CustomButton extends StatelessWidget {
                   top: 10,
                   left: 10,
                   child: Container(
-                    width: constraints.maxWidth - 20, // Уменьшаем ширину для отступов
+                    width: constraints.maxWidth -
+                        20, // Уменьшаем ширину для отступов
                     child: Text(
                       title,
                       style: TextStyle(
@@ -323,4 +383,3 @@ class CustomButton extends StatelessWidget {
     );
   }
 }
-
