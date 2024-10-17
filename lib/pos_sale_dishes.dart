@@ -11,8 +11,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   List<List<Map<String, dynamic>>> records = [
-    [],
-    [] // Добавляем новую вкладку
+    [] // Инициализируем только одну вкладку
   ]; // Список для хранения записей для каждой вкладки
   late TabController _tabController; // Контроллер для вкладок
   late TabController _buttonTabController; // Контроллер для вкладок кнопок
@@ -22,7 +21,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     super.initState();
     _tabController = TabController(
         length: records.length,
-        vsync: this); // Инициализация контроллера с двумя вкладками
+        vsync: this); // Инициализация контроллера с одной вкладкой
     _buttonTabController =
         TabController(length: 2, vsync: this); // Контроллер для кнопок
   }
@@ -36,34 +35,26 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
   void _addRecord(String title, String price) {
     setState(() {
-      int currentIndex =
-          _tabController.index; // Получаем индекс текущей вкладки
+      // Получаем индекс текущей вкладки
+      int currentIndex = _tabController.index;
 
-      // Проверяем, существует ли уже запись для нажатой кнопки
-      int existingIndex = records[currentIndex]
-          .indexWhere((record) => record['title'] == title);
-      if (existingIndex != -1) {
-        // Если запись существует, увеличиваем количество нажатий
-        records[currentIndex][existingIndex]['count']++;
-      } else {
-        // Проверяем, нужно ли добавить новую вкладку
-        if (records[currentIndex].length >= 4) {
-          // Если в текущей вкладке 4 записи, создаем новую вкладку
-          records.add([]); // Добавляем новый список для новой вкладки
-          _tabController =
-              TabController(length: _tabController.length + 1, vsync: this);
-        }
-
-        // Добавляем новую запись в текущую или новую вкладку
-        records[currentIndex].add({
-          'title': title,
-          'price': price,
-          'count': 1, // Начальное количество нажатий
-        });
+      // Проверяем, нужно ли добавить новую вкладку
+      if (records[currentIndex].length >= 4) {
+        // Если в текущей вкладке 4 записи, создаем новую вкладку
+        records.add([]); // Добавляем новый список для новой вкладки
+        _tabController = TabController(length: records.length, vsync: this);
       }
 
       // Устанавливаем фокус на последнюю вкладку
       _tabController.index = _tabController.length - 1;
+
+      // Теперь добавляем запись в новую или текущую вкладку
+      int newIndex = _tabController.index; // Получаем индекс новой вкладки
+      records[newIndex].add({
+        'title': title,
+        'price': price,
+        'count': 1, // Начальное количество нажатий
+      });
     });
   }
 
