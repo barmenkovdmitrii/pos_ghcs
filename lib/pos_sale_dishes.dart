@@ -87,8 +87,8 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
             double screenWidth = MediaQuery.of(context).size.width;
 
             double firstRowHeight = screenHeight * 0.10;
-            double secondRowHeight = screenHeight * 0.75;
-            double thirdRowHeight = screenHeight * 0.15;
+            double secondRowHeight = screenHeight * 0.90;
+            //double thirdRowHeight = screenHeight * 0.15;
 
             double buttonHeight = (screenHeight * 0.71) / 6;
             double buttonWidth = screenWidth * 0.63 / 6;
@@ -255,33 +255,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                   ],
                 ),
                 // Третья строка
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        height: thirdRowHeight,
-                        color: Colors.yellow,
-                        child: Center(
-                            child: Text('1/3',
-                                style: TextStyle(color: Colors.white))),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        height: thirdRowHeight,
-                        color: Colors.cyan,
-                        child: Center(
-                          child: Text(
-                            'Высота кнопки: ${buttonHeight.toStringAsFixed(2)}',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ],
             );
           },
