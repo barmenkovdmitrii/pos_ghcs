@@ -22,8 +22,8 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     _tabController = TabController(
         length: records.length,
         vsync: this); // Инициализация контроллера с одной вкладкой
-    _buttonTabController =
-        TabController(length: 2, vsync: this); // Контроллер для кнопок
+    _buttonTabController = TabController(
+        length: 5, vsync: this); // Изменяем количество вкладок кнопок на 5
   }
 
   @override
@@ -88,7 +88,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
             double firstRowHeight = screenHeight * 0.10;
             double secondRowHeight = screenHeight * 0.90;
-            //double thirdRowHeight = screenHeight * 0.15;
 
             double buttonHeight = (screenHeight * 0.71) / 6;
             double buttonWidth = screenWidth * 0.63 / 6;
@@ -185,34 +184,8 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                             Expanded(
                               child: TabBarView(
                                 controller: _buttonTabController,
-                                children: [
-                                  GridView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount:
-                                          6, // Количество кнопок в строке
-                                      childAspectRatio: buttonWidth /
-                                          buttonHeight, // Соотношение сторон
-                                    ),
-                                    itemCount: 36,
-                                    itemBuilder: (context, index) {
-                                      int buttonIndex =
-                                          index + 1; // Индекс кнопки
-                                      return CustomButton(
-                                        title: 'Кнопка $buttonIndex',
-                                        price: '${buttonIndex * 3}.00',
-                                        weight:
-                                            '${buttonIndex * 0.5} кг', // Добавляем вес
-                                        onPressed: () {
-                                          // Добавляем запись при нажатии на кнопку
-                                          _addRecord('Кнопка $buttonIndex',
-                                              '${buttonIndex * 3}.00');
-                                        },
-                                      );
-                                    },
-                                  ),
-                                  GridView.builder(
+                                children: List.generate(5, (tabIndex) {
+                                  return GridView.builder(
                                     physics: NeverScrollableScrollPhysics(),
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
@@ -224,7 +197,8 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                                     itemCount: 36,
                                     itemBuilder: (context, index) {
                                       int buttonIndex = index +
-                                          37; // Индекс кнопки для второй вкладки
+                                          (tabIndex * 36) +
+                                          1; // Индекс кнопки
                                       return CustomButton(
                                         title: 'Кнопка $buttonIndex',
                                         price: '${buttonIndex * 3}.00',
@@ -237,16 +211,15 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                                         },
                                       );
                                     },
-                                  ),
-                                ],
+                                  );
+                                }),
                               ),
                             ),
                             TabBar(
                               controller: _buttonTabController,
-                              tabs: [
-                                Tab(text: 'Кнопки 1'),
-                                Tab(text: 'Кнопки 2'),
-                              ],
+                              tabs: List.generate(5, (index) {
+                                return Tab(text: 'Кнопки ${index + 1}');
+                              }),
                             ),
                           ],
                         ),
@@ -254,7 +227,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                     ),
                   ],
                 ),
-                // Третья строка
               ],
             );
           },
