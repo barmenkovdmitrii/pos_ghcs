@@ -182,13 +182,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                         color: Colors.purple,
                         child: Column(
                           children: [
-                            TabBar(
-                              controller: _buttonTabController,
-                              tabs: [
-                                Tab(text: 'Кнопки 1'),
-                                Tab(text: 'Кнопки 2'),
-                              ],
-                            ),
                             Expanded(
                               child: TabBarView(
                                 controller: _buttonTabController,
@@ -247,6 +240,13 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                                   ),
                                 ],
                               ),
+                            ),
+                            TabBar(
+                              controller: _buttonTabController,
+                              tabs: [
+                                Tab(text: 'Кнопки 1'),
+                                Tab(text: 'Кнопки 2'),
+                              ],
                             ),
                           ],
                         ),
