@@ -119,8 +119,8 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
                     child: Text(
                         'Номер сборки: 1.0.0'), // Замените на актуальный номер сборки
                   ),
@@ -134,22 +134,22 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
                 ],
               ),
               // Вторая строка: название
-              Center(
+              const Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: EdgeInsets.all(16.0),
                   child: Text(
                     'Цифровая клавиатура',
-                    style: const TextStyle(fontSize: 24),
+                    style: TextStyle(fontSize: 24),
                   ),
                 ),
               ),
               // Третья строка: надпись смена
-              Center(
+              const Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: EdgeInsets.all(16.0),
                   child: Text(
                     'Смена',
-                    style: const TextStyle(fontSize: 24),
+                    style: TextStyle(fontSize: 24),
                   ),
                 ),
               ),
@@ -213,11 +213,11 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
               ),
             ),
             // Пятая строка: копирайт
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
               child: Text(
                 '© 2023 Ваше имя или компания',
-                style: const TextStyle(fontSize: 14),
+                style: TextStyle(fontSize: 14),
               ),
             ),
           ],

@@ -5,6 +5,8 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -101,7 +103,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                       child: Container(
                         height: firstRowHeight,
                         color: Colors.red,
-                        child: Center(
+                        child: const Center(
                             child: Text('1/3',
                                 style: TextStyle(color: Colors.white))),
                       ),
@@ -110,7 +112,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                       child: Container(
                         height: firstRowHeight,
                         color: Colors.green,
-                        child: Center(
+                        child: const Center(
                             child: Text('1/3',
                                 style: TextStyle(color: Colors.white))),
                       ),
@@ -119,7 +121,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                       child: Container(
                         height: firstRowHeight,
                         color: Colors.blue,
-                        child: Center(
+                        child: const Center(
                             child: Text('1/3',
                                 style: TextStyle(color: Colors.white))),
                       ),
@@ -158,7 +160,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                                         subtitle: Text(
                                             'Цена: ${records[index][recordIndex]['price']}, Количество: ${records[index][recordIndex]['count']}'),
                                         trailing: IconButton(
-                                          icon: Icon(Icons.delete,
+                                          icon: const Icon(Icons.delete,
                                               color: Colors.red),
                                           onPressed: () {
                                             _removeRecord(index, recordIndex);
@@ -186,7 +188,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                                 controller: _buttonTabController,
                                 children: List.generate(5, (tabIndex) {
                                   return GridView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
+                                    physics: const NeverScrollableScrollPhysics(),
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount:
@@ -242,7 +244,7 @@ class CustomButton extends StatelessWidget {
   final String weight; // Добавляем параметр для веса
   final VoidCallback onPressed; // Добавляем колбек для нажатия
 
-  CustomButton({
+  const CustomButton({super.key, 
     required this.title,
     required this.price,
     required this.weight, // Инициализируем параметр веса
@@ -264,7 +266,7 @@ class CustomButton extends StatelessWidget {
         return GestureDetector(
           onTap: onPressed, // Вызываем колбек при нажатии
           child: Container(
-            margin: EdgeInsets.all(4.0), // Отступы между кнопками
+            margin: const EdgeInsets.all(4.0), // Отступы между кнопками
             decoration: BoxDecoration(
               color: Colors.blue,
               borderRadius: BorderRadius.circular(10),
@@ -274,7 +276,7 @@ class CustomButton extends StatelessWidget {
                 Positioned(
                   top: 10,
                   left: 10,
-                  child: Container(
+                  child: SizedBox(
                     width: constraints.maxWidth -
                         20, // Уменьшаем ширину для отступов
                     child: Text(
