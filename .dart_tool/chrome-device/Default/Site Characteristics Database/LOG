@@ -1,1 +1,7 @@
-2024/10/21-11:24:03.128 1c4c Reusing MANIFEST C:\Users\Dima\AppData\Local\Temp\flutter_tools.f1984e50\flutter_tools_chrome_device.32ad1547\Default\Site Characteristics Database/MANIFEST-000001
+2024/10/21-11:26:01.068 1ef4 Reusing MANIFEST C:\Users\Dima\AppData\Local\Temp\flutter_tools.e3ab9e18\flutter_tools_chrome_device.ac03f71c\Default\Site Characteristics Database/MANIFEST-000001
+2024/10/21-11:26:01.070 1ef4 Recovering log #3
+2024/10/21-11:26:01.076 1ef4 Level-0 table #6: started
+2024/10/21-11:26:01.080 1ef4 Level-0 table #6: 551 bytes OK
+2024/10/21-11:26:01.081 1ef4 Recovering log #6
+2024/10/21-11:26:01.081 1ef4 Reusing old log C:\Users\Dima\AppData\Local\Temp\flutter_tools.e3ab9e18\flutter_tools_chrome_device.ac03f71c\Default\Site Characteristics Database/000006.log 
+2024/10/21-11:26:01.086 1ef4 Delete type=0 #3

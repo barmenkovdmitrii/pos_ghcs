@@ -1,5 +1,1 @@
-2024/10/21-11:24:03.114 1c4c Log #3: 34 ops saved to Table #4 OK
-2024/10/21-11:24:03.117 1c4c Archiving C:\Users\Dima\AppData\Local\Temp\flutter_tools.f1984e50\flutter_tools_chrome_device.32ad1547\Default\Site Characteristics Database/000003.log: OK
-2024/10/21-11:24:03.117 1c4c Table #4: 34 entries OK
-2024/10/21-11:24:03.119 1c4c Archiving C:\Users\Dima\AppData\Local\Temp\flutter_tools.f1984e50\flutter_tools_chrome_device.32ad1547\Default\Site Characteristics Database/MANIFEST-000001: OK
-2024/10/21-11:24:03.125 1c4c **** Repaired leveldb C:\Users\Dima\AppData\Local\Temp\flutter_tools.f1984e50\flutter_tools_chrome_device.32ad1547\Default\Site Characteristics Database; recovered 1 files; 551 bytes. Some data may have been lost. ****
+2024/10/21-11:24:03.128 1c4c Reusing MANIFEST C:\Users\Dima\AppData\Local\Temp\flutter_tools.f1984e50\flutter_tools_chrome_device.32ad1547\Default\Site Characteristics Database/MANIFEST-000001
