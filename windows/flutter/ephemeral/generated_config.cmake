@@ -15,7 +15,7 @@ list(APPEND FLUTTER_TOOL_ENVIRONMENT
   "FLUTTER_ROOT=C:\\SDK\\flutter"
   "FLUTTER_EPHEMERAL_DIR=C:\\Users\\Dima\\SynologyDrive\\Project\\pos_ghcs\\windows\\flutter\\ephemeral"
   "PROJECT_DIR=C:\\Users\\Dima\\SynologyDrive\\Project\\pos_ghcs"
-  "FLUTTER_TARGET=C:\\Users\\Dima\\SynologyDrive\\Project\\pos_ghcs\\lib\\pos_authorization.dart"
+  "FLUTTER_TARGET=C:\\Users\\Dima\\SynologyDrive\\Project\\pos_ghcs\\lib\\pos_sale_dishes.dart"
   "DART_OBFUSCATION=false"
   "TRACK_WIDGET_CREATION=true"
   "TREE_SHAKE_ICONS=false"
