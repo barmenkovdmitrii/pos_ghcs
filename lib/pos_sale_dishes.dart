@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: records.length, vsync: this);
-    _buttonTabController = TabController(length: 5, vsync: this);
+    _buttonTabController = TabController(length: 15, vsync: this);
   }
 
   @override
@@ -198,7 +198,7 @@ class TabButtonPanel extends StatelessWidget {
         Expanded(
           child: TabBarView(
             controller: buttonTabController,
-            children: List.generate(5, (tabIndex) {
+            children: List.generate(15, (tabIndex) {
               return GridView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -241,13 +241,21 @@ class TabButtonPanel extends StatelessWidget {
               child: TabBar(
                 controller: buttonTabController,
                 isScrollable: true, // Позволяет прокручивать вкладки
-                tabs: List.generate(5, (index) {
+                tabs: List.generate(15, (index) {
                   return Tab(
-                    child: Text(
-                      'Кнопки ${index + 1}',
-                      style: TextStyle(
-                          color:
-                              Colors.white), // Устанавливаем белый цвет текста
+                    child: Container(
+                      width: screenWidth *
+                          0.66 /
+                          4, // Устанавливаем ширину контейнера
+                      child: Text(
+                        'Кнопки с длинной надписью что бы было ${index + 1}',
+                        style: TextStyle(
+                            color: Colors
+                                .white), // Устанавливаем белый цвет текста
+                        maxLines: 2, // Ограничиваем количество строк до 2
+                        overflow: TextOverflow
+                            .ellipsis, // Обрезаем текст, если он длиннее
+                      ),
                     ),
                   );
                 }),
