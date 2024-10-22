@@ -22,7 +22,12 @@ class MyApp extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: Text("Child2"),
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Transform(transform.scale: 2.0,
+                    child: Text("Child2"),
+                  ),
+                ),
               ),
               Text("Child3"),
             ],
