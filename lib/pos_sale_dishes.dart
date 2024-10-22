@@ -233,7 +233,7 @@ class TabButtonPanel extends StatelessWidget {
               icon: Icon(Icons.arrow_back),
               onPressed: () {
                 if (buttonTabController.index > 0) {
-                  buttonTabController.animateTo(buttonTabController.index - 1);
+                  buttonTabController.animateTo(buttonTabController.index - 4);
                 }
               },
             ),
@@ -267,7 +267,7 @@ class TabButtonPanel extends StatelessWidget {
               onPressed: () {
                 if (buttonTabController.index <
                     buttonTabController.length - 1) {
-                  buttonTabController.animateTo(buttonTabController.index + 1);
+                  buttonTabController.animateTo(buttonTabController.index + 4);
                 }
               },
             ),
