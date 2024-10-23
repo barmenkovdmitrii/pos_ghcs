@@ -10,11 +10,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
-  List<List<Map<String, dynamic>>> records = [
-    []
-  ]; // Инициализируем только одну вкладку
-  late TabController _tabController; // Контроллер для вкладок
-  late TabController _buttonTabController; // Контроллер для вкладок кнопок
+  List<List<Map<String, dynamic>>> records = [[]];
+  late TabController _tabController;
+  late TabController _buttonTabController;
+  Map<int, int> buttonClickCounts =
+      {}; // Хранит количество нажатий для каждой кнопки
 
   @override
   void initState() {
@@ -66,6 +66,13 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     });
   }
 
+  void _incrementButtonClick(int buttonIndex) {
+    setState(() {
+      buttonClickCounts[buttonIndex] =
+          (buttonClickCounts[buttonIndex] ?? 0) + 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -80,7 +87,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
             return Column(
               children: [
-                // Первая строка
                 Row(
                   children: [
                     Expanded(
@@ -106,7 +112,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                                     style: TextStyle(color: Colors.white))))),
                   ],
                 ),
-                // Вторая строка с вкладками
                 Row(
                   children: [
                     Expanded(
@@ -164,6 +169,10 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                           onButtonPressed: (title, price) {
                             _addRecord(title, price);
                           },
+                          onButtonClick: (buttonIndex) {
+                            _incrementButtonClick(buttonIndex);
+                          },
+                          buttonClickCounts: buttonClickCounts,
                         ),
                       ),
                     ),
@@ -181,17 +190,23 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 class TabButtonPanel extends StatelessWidget {
   final TabController buttonTabController;
   final Function(String title, String price) onButtonPressed;
+  final Function(int buttonIndex) onButtonClick;
+  final Map<int, int> buttonClickCounts;
 
-  TabButtonPanel(
-      {required this.buttonTabController, required this.onButtonPressed});
+  TabButtonPanel({
+    required this.buttonTabController,
+    required this.onButtonPressed,
+    required this.onButtonClick,
+    required this.buttonClickCounts,
+  });
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
-    double buttonHeight = (screenHeight * 0.80) / 6; // Высота кнопки
-    double buttonWidth = (screenWidth * 0.64) / 6; // Ширина кнопки
+    double buttonHeight = (screenHeight * 0.80) / 6;
+    double buttonWidth = (screenWidth * 0.64) / 6;
 
     return Column(
       children: [
@@ -202,25 +217,26 @@ class TabButtonPanel extends StatelessWidget {
               return GridView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 6, // Количество кнопок в строке
-                  childAspectRatio:
-                      buttonWidth / buttonHeight, // Соотношение сторон
+                  crossAxisCount: 6,
+                  childAspectRatio: buttonWidth / buttonHeight,
                 ),
                 itemCount: 36,
                 itemBuilder: (context, index) {
-                  int buttonIndex =
-                      index + (tabIndex * 36) + 1; // Индекс кнопки
+                  int buttonIndex = index + (tabIndex * 36) + 1;
                   return CustomButton(
                     title: 'Кнопка $buttonIndex',
                     price: '${buttonIndex * 3}.00',
-                    weight: '${buttonIndex * 0.5} кг', // Добавляем вес
+                    weight: '${buttonIndex * 0.5} кг',
                     onPressed: () {
-                      // Добавляем запись при нажатии на кнопку
                       onButtonPressed(
                           'Кнопка $buttonIndex', '${buttonIndex * 3}.00');
+                      onButtonClick(
+                          buttonIndex); // Увеличиваем количество нажатий
                     },
-                    buttonHeight: buttonHeight, // Передаем высоту кнопки
-                    buttonWidth: buttonWidth, // Передаем ширину кнопки
+                    buttonHeight: buttonHeight,
+                    buttonWidth: buttonWidth,
+                    clickCount: buttonClickCounts[buttonIndex] ??
+                        0, // Передаем количество нажатий
                   );
                 },
               );
@@ -240,26 +256,21 @@ class TabButtonPanel extends StatelessWidget {
             Expanded(
               child: TabBar(
                 controller: buttonTabController,
-                isScrollable: true, // Позволяет прокручивать вкладки
+                isScrollable: true,
                 tabs: List.generate(15, (index) {
                   return Tab(
                     child: Container(
-                      width: screenWidth *
-                          0.66 /
-                          4, // Устанавливаем ширину контейнера
+                      width: screenWidth * 0.66 / 4,
                       child: Text(
                         'Кнопки с длинной надписью что бы было ${index + 1}',
-                        style: TextStyle(
-                            color: Colors
-                                .white), // Устанавливаем белый цвет текста
-                        maxLines: 2, // Ограничиваем количество строк до 2
-                        overflow: TextOverflow
-                            .ellipsis, // Обрезаем текст, если он длиннее
+                        style: TextStyle(color: Colors.white),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   );
                 }),
-                indicatorColor: Colors.white, // Устанавливаем цвет индикатора
+                indicatorColor: Colors.white,
               ),
             ),
             IconButton(
@@ -278,45 +289,33 @@ class TabButtonPanel extends StatelessWidget {
   }
 }
 
-class CustomButton extends StatefulWidget {
+class CustomButton extends StatelessWidget {
   final String title;
   final String price;
-  final String weight; // Добавляем параметр для веса
-  final VoidCallback onPressed; // Добавляем колбек для нажатия
-  final double buttonHeight; // Высота кнопки
-  final double buttonWidth; // Ширина кнопки
+  final String weight;
+  final VoidCallback onPressed;
+  final double buttonHeight;
+  final double buttonWidth;
+  final int clickCount; // Добавляем параметр для количества нажатий
 
   CustomButton({
     required this.title,
     required this.price,
-    required this.weight, // Инициализируем параметр веса
-    required this.onPressed, // Инициализируем колбек
-    required this.buttonHeight, // Инициализируем высоту кнопки
-    required this.buttonWidth, // Инициализируем ширину кнопки
+    required this.weight,
+    required this.onPressed,
+    required this.buttonHeight,
+    required this.buttonWidth,
+    required this.clickCount, // Инициализируем параметр количества нажатий
   });
-
-  @override
-  _CustomButtonState createState() => _CustomButtonState();
-}
-
-class _CustomButtonState extends State<CustomButton> {
-  int _clickCount = 0; // Переменная для хранения количества нажатий
-
-  void _handlePress() {
-    setState(() {
-      _clickCount++; // Увеличиваем количество нажатий
-    });
-    widget.onPressed(); // Вызываем колбек при нажатии
-  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _handlePress, // Вызываем метод при нажатии
+      onTap: onPressed, // Вызываем метод при нажатии
       child: Container(
-        height: widget.buttonHeight, // Устанавливаем высоту кнопки
-        width: widget.buttonWidth, // Устанавливаем ширину кнопки
-        margin: EdgeInsets.all(4.0), // Отступы между кнопками
+        height: buttonHeight,
+        width: buttonWidth,
+        margin: EdgeInsets.all(4.0),
         decoration: BoxDecoration(
           color: Colors.blue,
           borderRadius: BorderRadius.circular(10),
@@ -327,17 +326,16 @@ class _CustomButtonState extends State<CustomButton> {
               top: 10,
               left: 10,
               child: Container(
-                width: widget.buttonWidth - 20, // Уменьшаем ширину для отступов
+                width: buttonWidth - 20,
                 child: Text(
-                  widget.title,
+                  title,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize:
-                        widget.buttonHeight * 0.15, // 15% от высоты кнопки
+                    fontSize: buttonHeight * 0.15,
                     fontWeight: FontWeight.bold,
                   ),
-                  maxLines: 2, // Максимальное количество строк
-                  overflow: TextOverflow.visible, // Перенос текста
+                  maxLines: 2,
+                  overflow: TextOverflow.visible,
                 ),
               ),
             ),
@@ -345,10 +343,10 @@ class _CustomButtonState extends State<CustomButton> {
               bottom: 10,
               left: 10,
               child: Text(
-                widget.weight, // Отображаем вес
+                weight,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: widget.buttonHeight * 0.1, // 10% от высоты кнопки
+                  fontSize: buttonHeight * 0.1,
                 ),
               ),
             ),
@@ -356,15 +354,15 @@ class _CustomButtonState extends State<CustomButton> {
               bottom: 10,
               right: 10,
               child: Text(
-                widget.price,
+                price,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: widget.buttonHeight * 0.1, // 10% от высоты кнопки
+                  fontSize: buttonHeight * 0.1,
                 ),
               ),
             ),
             // Отображаем количество нажатий только если оно больше 0
-            if (_clickCount > 0)
+            if (clickCount > 0)
               Positioned(
                 top: 10,
                 right: 10,
@@ -375,11 +373,10 @@ class _CustomButtonState extends State<CustomButton> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
-                    '$_clickCount', // Отображаем количество нажатий
+                    '$clickCount', // Отображаем количество нажатий
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize:
-                          widget.buttonHeight * 0.1, // 10% от высоты кнопки
+                      fontSize: buttonHeight * 0.1,
                     ),
                   ),
                 ),
