@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _addRecord(String title, String price) {
+  void _addRecord(String title, String price, int buttonIndex) {
     setState(() {
       int currentIndex = _tabController.index;
 
@@ -45,12 +45,21 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
         'title': title,
         'price': price,
         'count': 1,
+        'buttonIndex': buttonIndex, // Сохраняем индекс кнопки
       });
     });
   }
 
   void _removeRecord(int index, int recordIndex) {
     setState(() {
+      // Получаем индекс кнопки, связанной с записью
+      int buttonIndex = records[index][recordIndex]['buttonIndex'];
+
+      // Уменьшаем количество нажатий на кнопке
+      buttonClickCounts[buttonIndex] =
+          (buttonClickCounts[buttonIndex] ?? 1) - 1;
+
+      // Удаляем запись
       records[index].removeAt(recordIndex);
       if (records[index].isEmpty) {
         records.removeAt(index);
@@ -112,6 +121,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                                     style: TextStyle(color: Colors.white))))),
                   ],
                 ),
+                //вторая строка
                 Row(
                   children: [
                     Expanded(
@@ -166,8 +176,8 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                         color: Colors.purple,
                         child: TabButtonPanel(
                           buttonTabController: _buttonTabController,
-                          onButtonPressed: (title, price) {
-                            _addRecord(title, price);
+                          onButtonPressed: (title, price, buttonIndex) {
+                            _addRecord(title, price, buttonIndex);
                           },
                           onButtonClick: (buttonIndex) {
                             _incrementButtonClick(buttonIndex);
@@ -189,7 +199,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
 class TabButtonPanel extends StatelessWidget {
   final TabController buttonTabController;
-  final Function(String title, String price) onButtonPressed;
+  final Function(String title, String price, int buttonIndex) onButtonPressed;
   final Function(int buttonIndex) onButtonClick;
   final Map<int, int> buttonClickCounts;
 
@@ -229,7 +239,9 @@ class TabButtonPanel extends StatelessWidget {
                     weight: '${buttonIndex * 0.5} кг',
                     onPressed: () {
                       onButtonPressed(
-                          'Кнопка $buttonIndex', '${buttonIndex * 3}.00');
+                          'Кнопка $buttonIndex',
+                          '${buttonIndex * 3}.00',
+                          buttonIndex); // Передаем индекс кнопки
                       onButtonClick(
                           buttonIndex); // Увеличиваем количество нажатий
                     },
