@@ -278,7 +278,7 @@ class TabButtonPanel extends StatelessWidget {
   }
 }
 
-class CustomButton extends StatelessWidget {
+class CustomButton extends StatefulWidget {
   final String title;
   final String price;
   final String weight; // Добавляем параметр для веса
@@ -296,12 +296,26 @@ class CustomButton extends StatelessWidget {
   });
 
   @override
+  _CustomButtonState createState() => _CustomButtonState();
+}
+
+class _CustomButtonState extends State<CustomButton> {
+  int _clickCount = 0; // Переменная для хранения количества нажатий
+
+  void _handlePress() {
+    setState(() {
+      _clickCount++; // Увеличиваем количество нажатий
+    });
+    widget.onPressed(); // Вызываем колбек при нажатии
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed, // Вызываем колбек при нажатии
+      onTap: _handlePress, // Вызываем метод при нажатии
       child: Container(
-        height: buttonHeight, // Устанавливаем высоту кнопки
-        width: buttonWidth, // Устанавливаем ширину кнопки
+        height: widget.buttonHeight, // Устанавливаем высоту кнопки
+        width: widget.buttonWidth, // Устанавливаем ширину кнопки
         margin: EdgeInsets.all(4.0), // Отступы между кнопками
         decoration: BoxDecoration(
           color: Colors.blue,
@@ -313,12 +327,13 @@ class CustomButton extends StatelessWidget {
               top: 10,
               left: 10,
               child: Container(
-                width: buttonWidth - 20, // Уменьшаем ширину для отступов
+                width: widget.buttonWidth - 20, // Уменьшаем ширину для отступов
                 child: Text(
-                  title,
+                  widget.title,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: buttonHeight * 0.15, // 15% от высоты кнопки
+                    fontSize:
+                        widget.buttonHeight * 0.15, // 15% от высоты кнопки
                     fontWeight: FontWeight.bold,
                   ),
                   maxLines: 2, // Максимальное количество строк
@@ -330,10 +345,10 @@ class CustomButton extends StatelessWidget {
               bottom: 10,
               left: 10,
               child: Text(
-                weight, // Отображаем вес
+                widget.weight, // Отображаем вес
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: buttonHeight * 0.1, // 10% от высоты кнопки
+                  fontSize: widget.buttonHeight * 0.1, // 10% от высоты кнопки
                 ),
               ),
             ),
@@ -341,13 +356,34 @@ class CustomButton extends StatelessWidget {
               bottom: 10,
               right: 10,
               child: Text(
-                price,
+                widget.price,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: buttonHeight * 0.1, // 10% от высоты кнопки
+                  fontSize: widget.buttonHeight * 0.1, // 10% от высоты кнопки
                 ),
               ),
             ),
+            // Отображаем количество нажатий только если оно больше 0
+            if (_clickCount > 0)
+              Positioned(
+                top: 10,
+                right: 10,
+                child: Container(
+                  padding: EdgeInsets.all(4.0),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    '$_clickCount', // Отображаем количество нажатий
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize:
+                          widget.buttonHeight * 0.1, // 10% от высоты кнопки
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
