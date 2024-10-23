@@ -41,12 +41,26 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
       _tabController.index = _tabController.length - 1;
       int newIndex = _tabController.index;
-      records[newIndex].add({
-        'title': title,
-        'price': price,
-        'count': 1,
-        'buttonIndex': buttonIndex, // Сохраняем индекс кнопки
-      });
+
+      // Проверяем, существует ли уже запись с таким же названием и ценой
+      bool exists = false;
+      for (var record in records[newIndex]) {
+        if (record['title'] == title && record['price'] == price) {
+          record['count'] += 1; // Увеличиваем количество
+          exists = true;
+          break;
+        }
+      }
+
+      // Если записи не существует, добавляем новую
+      if (!exists) {
+        records[newIndex].add({
+          'title': title,
+          'price': price,
+          'count': 1,
+          'buttonIndex': buttonIndex, // Сохраняем индекс кнопки
+        });
+      }
     });
   }
 
@@ -59,8 +73,14 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
       buttonClickCounts[buttonIndex] =
           (buttonClickCounts[buttonIndex] ?? 1) - 1;
 
-      // Удаляем запись
-      records[index].removeAt(recordIndex);
+      // Уменьшаем количество записи
+      records[index][recordIndex]['count'] -= 1;
+
+      // Если количество стало 0, удаляем запись
+      if (records[index][recordIndex]['count'] <= 0) {
+        records[index].removeAt(recordIndex);
+      }
+
       if (records[index].isEmpty) {
         records.removeAt(index);
         if (_tabController.length > 1) {
@@ -121,7 +141,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                                     style: TextStyle(color: Colors.white))))),
                   ],
                 ),
-                //вторая строка
+                // Вторая строка
                 Row(
                   children: [
                     Expanded(
@@ -272,7 +292,7 @@ class TabButtonPanel extends StatelessWidget {
                 tabs: List.generate(15, (index) {
                   return Tab(
                     child: Container(
-                      width: screenWidth * 0.66 / 4,
+                      width: MediaQuery.of(context).size.width * 0.66 / 4,
                       child: Text(
                         'Кнопки с длинной надписью что бы было ${index + 1}',
                         style: TextStyle(color: Colors.white),
