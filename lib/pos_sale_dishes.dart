@@ -13,8 +13,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   List<List<Map<String, dynamic>>> records = [[]];
   late TabController _tabController;
   late TabController _buttonTabController;
-  Map<int, int> buttonClickCounts =
-      {}; // Хранит количество нажатий для каждой кнопки
+  Map<int, int> buttonClickCounts = {};
 
   @override
   void initState() {
@@ -42,23 +41,21 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
       _tabController.index = _tabController.length - 1;
       int newIndex = _tabController.index;
 
-      // Проверяем, существует ли уже запись с таким же названием и ценой
       bool exists = false;
       for (var record in records[newIndex]) {
         if (record['title'] == title && record['price'] == price) {
-          record['count'] += 1; // Увеличиваем количество
+          record['count'] += 1;
           exists = true;
           break;
         }
       }
 
-      // Если записи не существует, добавляем новую
       if (!exists) {
         records[newIndex].add({
           'title': title,
           'price': price,
           'count': 1,
-          'buttonIndex': buttonIndex, // Сохраняем индекс кнопки
+          'buttonIndex': buttonIndex,
         });
       }
     });
@@ -66,17 +63,10 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
   void _removeRecord(int index, int recordIndex) {
     setState(() {
-      // Получаем индекс кнопки, связанной с записью
       int buttonIndex = records[index][recordIndex]['buttonIndex'];
-
-      // Уменьшаем количество нажатий на кнопке
-      buttonClickCounts[buttonIndex] =
-          (buttonClickCounts[buttonIndex] ?? 1) - 1;
-
-      // Уменьшаем количество записи
+      buttonClickCounts[buttonIndex] = (buttonClickCounts[buttonIndex] ?? 1) - 1;
       records[index][recordIndex]['count'] -= 1;
 
-      // Если количество стало 0, удаляем запись
       if (records[index][recordIndex]['count'] <= 0) {
         records[index].removeAt(recordIndex);
       }
@@ -84,11 +74,9 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
       if (records[index].isEmpty) {
         records.removeAt(index);
         if (_tabController.length > 1) {
-          _tabController =
-              TabController(length: _tabController.length - 1, vsync: this);
+          _tabController = TabController(length: _tabController.length - 1, vsync: this);
           if (_tabController.index >= index) {
-            _tabController.index =
-                _tabController.index > 0 ? _tabController.index - 1 : 0;
+            _tabController.index = _tabController.index > 0 ? _tabController.index - 1 : 0;
           }
         }
       }
@@ -97,8 +85,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
   void _incrementButtonClick(int buttonIndex) {
     setState(() {
-      buttonClickCounts[buttonIndex] =
-          (buttonClickCounts[buttonIndex] ?? 0) + 1;
+      buttonClickCounts[buttonIndex] = (buttonClickCounts[buttonIndex] ?? 0) + 1;
     });
   }
 
@@ -118,30 +105,11 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
               children: [
                 Row(
                   children: [
-                    Expanded(
-                        child: Container(
-                            height: firstRowHeight,
-                            color: Colors.red,
-                            child: Center(
-                                child: Text('1/3',
-                                    style: TextStyle(color: Colors.white))))),
-                    Expanded(
-                        child: Container(
-                            height: firstRowHeight,
-                            color: Colors.green,
-                            child: Center(
-                                child: Text('1/3',
-                                    style: TextStyle(color: Colors.white))))),
-                    Expanded(
-                        child: Container(
-                            height: firstRowHeight,
-                            color: Colors.blue,
-                            child: Center(
-                                child: Text('1/3',
-                                    style: TextStyle(color: Colors.white))))),
+                    Expanded(child: Container(height: firstRowHeight, color: Colors.red, child: Center(child: Text('1/3', style: TextStyle(color: Colors.white))))),
+                    Expanded(child: Container(height: firstRowHeight, color: Colors.green, child: Center(child: Text('1/3', style: TextStyle(color: Colors.white))))),
+                    Expanded(child: Container(height: firstRowHeight, color: Colors.blue, child: Center(child: Text('1/3', style: TextStyle(color: Colors.white))))),
                   ],
                 ),
-                // Вторая строка
                 Row(
                   children: [
                     Expanded(
@@ -154,35 +122,15 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                             TabBar(
                               controller: _tabController,
                               isScrollable: true,
-                              tabs:
-                                  List.generate(_tabController.length, (index) {
+                              tabs: List.generate(_tabController.length, (index) {
                                 return Tab(text: 'Вкладка ${index + 1}');
                               }),
                             ),
                             Expanded(
-                              child: TabBarView(
-                                controller: _tabController,
-                                children: List.generate(_tabController.length,
-                                    (index) {
-                                  return ListView.builder(
-                                    itemCount: records[index].length,
-                                    itemBuilder: (context, recordIndex) {
-                                      return ListTile(
-                                        title: Text(
-                                            'Кнопка: ${records[index][recordIndex]['title']}'),
-                                        subtitle: Text(
-                                            'Цена: ${records[index][recordIndex]['price']}, Количество: ${records[index][recordIndex]['count']}'),
-                                        trailing: IconButton(
-                                          icon: Icon(Icons.delete,
-                                              color: Colors.red),
-                                          onPressed: () {
-                                            _removeRecord(index, recordIndex);
-                                          },
-                                        ),
-                                      );
-                                    },
-                                  );
-                                }),
+                              child: CustomTabBarView(
+                                tabController: _tabController,
+                                records: records,
+                                onRemoveRecord: _removeRecord
                               ),
                             ),
                           ],
@@ -213,6 +161,62 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
           },
         ),
       ),
+    );
+  }
+}
+
+class CustomTabBarView extends StatelessWidget {
+  final TabController tabController;
+  final List<List<Map<String, dynamic>>> records;
+  final Function(int index, int recordIndex) onRemoveRecord;
+
+  CustomTabBarView({
+    required this.tabController,
+    required this.records,
+    required this.onRemoveRecord,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TabBarView(
+      controller: tabController,
+      children: List.generate(tabController.length, (index) {
+        return CustomListView(
+          records: records[index],
+          onRemoveRecord: (recordIndex) {
+            onRemoveRecord(index, recordIndex);
+          },
+        );
+      }),
+    );
+  }
+}
+
+class CustomListView extends StatelessWidget {
+  final List<Map<String, dynamic>> records;
+  final Function(int recordIndex) onRemoveRecord;
+
+  CustomListView({
+    required this.records,
+    required this.onRemoveRecord,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: records.length,
+      itemBuilder: (context, recordIndex) {
+        return ListTile(
+          title: Text('Кнопка: ${records[recordIndex]['title']}'),
+          subtitle: Text('Цена: ${records[recordIndex]['price']}, Количество: ${records[recordIndex]['count']}'),
+          trailing: IconButton(
+            icon: Icon(Icons.delete, color: Colors.red),
+            onPressed: () {
+              onRemoveRecord(recordIndex);
+            },
+          ),
+        );
+      },
     );
   }
 }
@@ -258,17 +262,12 @@ class TabButtonPanel extends StatelessWidget {
                     price: '${buttonIndex * 3}.00',
                     weight: '${buttonIndex * 0.5} кг',
                     onPressed: () {
-                      onButtonPressed(
-                          'Кнопка $buttonIndex',
-                          '${buttonIndex * 3}.00',
-                          buttonIndex); // Передаем индекс кнопки
-                      onButtonClick(
-                          buttonIndex); // Увеличиваем количество нажатий
+                      onButtonPressed('Кнопка $buttonIndex', '${buttonIndex * 3}.00', buttonIndex);
+                      onButtonClick(buttonIndex);
                     },
                     buttonHeight: buttonHeight,
                     buttonWidth: buttonWidth,
-                    clickCount: buttonClickCounts[buttonIndex] ??
-                        0, // Передаем количество нажатий
+                    clickCount: buttonClickCounts[buttonIndex] ?? 0,
                   );
                 },
               );
@@ -292,7 +291,7 @@ class TabButtonPanel extends StatelessWidget {
                 tabs: List.generate(15, (index) {
                   return Tab(
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.66 / 4,
+                                           width: MediaQuery.of(context).size.width * 0.66 / 4,
                       child: Text(
                         'Кнопки с длинной надписью что бы было ${index + 1}',
                         style: TextStyle(color: Colors.white),
@@ -308,8 +307,7 @@ class TabButtonPanel extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.arrow_forward),
               onPressed: () {
-                if (buttonTabController.index <
-                    buttonTabController.length - 1) {
+                if (buttonTabController.index < buttonTabController.length - 1) {
                   buttonTabController.animateTo(buttonTabController.index + 4);
                 }
               },
@@ -328,7 +326,7 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   final double buttonHeight;
   final double buttonWidth;
-  final int clickCount; // Добавляем параметр для количества нажатий
+  final int clickCount;
 
   CustomButton({
     required this.title,
@@ -337,13 +335,13 @@ class CustomButton extends StatelessWidget {
     required this.onPressed,
     required this.buttonHeight,
     required this.buttonWidth,
-    required this.clickCount, // Инициализируем параметр количества нажатий
+    required this.clickCount,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed, // Вызываем метод при нажатии
+      onTap: onPressed,
       child: Container(
         height: buttonHeight,
         width: buttonWidth,
@@ -393,7 +391,6 @@ class CustomButton extends StatelessWidget {
                 ),
               ),
             ),
-            // Отображаем количество нажатий только если оно больше 0
             if (clickCount > 0)
               Positioned(
                 top: 10,
@@ -405,7 +402,7 @@ class CustomButton extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
-                    '$clickCount', // Отображаем количество нажатий
+                    '$clickCount',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: buttonHeight * 0.1,
