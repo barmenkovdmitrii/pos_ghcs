@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Flutter Playground!",
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Flutter Playground!"),
+          title: const Text("Flutter Playground!"),
         ),
-        drawer: Drawer(
+        drawer: const Drawer(
           child: Column(
             children: [
               Text("Item 1"),
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
             ],
           ),
         ),
-        body: Center(
+        body: const Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center, // Центрируем элементы в строке
             children: [

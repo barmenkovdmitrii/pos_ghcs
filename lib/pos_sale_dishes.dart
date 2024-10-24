@@ -5,6 +5,8 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -105,9 +107,9 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
               children: [
                 Row(
                   children: [
-                    Expanded(child: Container(height: firstRowHeight, color: Colors.red, child: Center(child: Text('1/3', style: TextStyle(color: Colors.white))))),
-                    Expanded(child: Container(height: firstRowHeight, color: Colors.green, child: Center(child: Text('1/3', style: TextStyle(color: Colors.white))))),
-                    Expanded(child: Container(height: firstRowHeight, color: Colors.blue, child: Center(child: Text('1/3', style: TextStyle(color: Colors.white))))),
+                    Expanded(child: Container(height: firstRowHeight, color: Colors.red, child: const Center(child: Text('1/3', style: TextStyle(color: Colors.white))))),
+                    Expanded(child: Container(height: firstRowHeight, color: Colors.green, child: const Center(child: Text('1/3', style: TextStyle(color: Colors.white))))),
+                    Expanded(child: Container(height: firstRowHeight, color: Colors.blue, child: const Center(child: Text('1/3', style: TextStyle(color: Colors.white))))),
                   ],
                 ),
                 Row(
@@ -170,7 +172,7 @@ class CustomTabBarView extends StatelessWidget {
   final List<List<Map<String, dynamic>>> records;
   final Function(int index, int recordIndex) onRemoveRecord;
 
-  CustomTabBarView({
+  const CustomTabBarView({super.key, 
     required this.tabController,
     required this.records,
     required this.onRemoveRecord,
@@ -196,7 +198,7 @@ class CustomListView extends StatelessWidget {
   final List<Map<String, dynamic>> records;
   final Function(int recordIndex) onRemoveRecord;
 
-  CustomListView({
+  const CustomListView({super.key, 
     required this.records,
     required this.onRemoveRecord,
   });
@@ -210,7 +212,7 @@ class CustomListView extends StatelessWidget {
           title: Text('Кнопка: ${records[recordIndex]['title']}'),
           subtitle: Text('Цена: ${records[recordIndex]['price']}, Количество: ${records[recordIndex]['count']}'),
           trailing: IconButton(
-            icon: Icon(Icons.delete, color: Colors.red),
+            icon: const Icon(Icons.delete, color: Colors.red),
             onPressed: () {
               onRemoveRecord(recordIndex);
             },
@@ -227,7 +229,7 @@ class TabButtonPanel extends StatelessWidget {
   final Function(int buttonIndex) onButtonClick;
   final Map<int, int> buttonClickCounts;
 
-  TabButtonPanel({
+  const TabButtonPanel({super.key, 
     required this.buttonTabController,
     required this.onButtonPressed,
     required this.onButtonClick,
@@ -249,7 +251,7 @@ class TabButtonPanel extends StatelessWidget {
             controller: buttonTabController,
             children: List.generate(15, (tabIndex) {
               return GridView.builder(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 6,
                   childAspectRatio: buttonWidth / buttonHeight,
@@ -277,7 +279,7 @@ class TabButtonPanel extends StatelessWidget {
         Row(
           children: [
             IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 if (buttonTabController.index > 0) {
                   buttonTabController.animateTo(buttonTabController.index - 4);
@@ -290,11 +292,11 @@ class TabButtonPanel extends StatelessWidget {
                 isScrollable: true,
                 tabs: List.generate(15, (index) {
                   return Tab(
-                    child: Container(
+                    child: SizedBox(
                                            width: MediaQuery.of(context).size.width * 0.66 / 4,
                       child: Text(
                         'Кнопки с длинной надписью что бы было ${index + 1}',
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -305,7 +307,7 @@ class TabButtonPanel extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: Icon(Icons.arrow_forward),
+              icon: const Icon(Icons.arrow_forward),
               onPressed: () {
                 if (buttonTabController.index < buttonTabController.length - 1) {
                   buttonTabController.animateTo(buttonTabController.index + 4);
@@ -328,7 +330,7 @@ class CustomButton extends StatelessWidget {
   final double buttonWidth;
   final int clickCount;
 
-  CustomButton({
+  const CustomButton({super.key, 
     required this.title,
     required this.price,
     required this.weight,
@@ -345,7 +347,7 @@ class CustomButton extends StatelessWidget {
       child: Container(
         height: buttonHeight,
         width: buttonWidth,
-        margin: EdgeInsets.all(4.0),
+        margin: const EdgeInsets.all(4.0),
         decoration: BoxDecoration(
           color: Colors.blue,
           borderRadius: BorderRadius.circular(10),
@@ -355,7 +357,7 @@ class CustomButton extends StatelessWidget {
             Positioned(
               top: 10,
               left: 10,
-              child: Container(
+              child: SizedBox(
                 width: buttonWidth - 20,
                 child: Text(
                   title,
@@ -396,7 +398,7 @@ class CustomButton extends StatelessWidget {
                 top: 10,
                 right: 10,
                 child: Container(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4.0),
                   decoration: BoxDecoration(
                     color: Colors.red,
                     borderRadius: BorderRadius.circular(10),
