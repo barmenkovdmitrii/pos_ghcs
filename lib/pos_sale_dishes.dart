@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(MyApp());
@@ -173,13 +174,15 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                             ),
                             // Добавляем строку для отображения общей суммы
                             Container(
-                              height: firstRowHeight, // 10% от высоты экрана
+                              height:
+                                  firstRowHeight / 2, // 10% от высоты экрана
                               color: Colors.yellow,
                               child: Center(
                                 child: Text(
-                                  'Итого: ${_calculateTotal().toStringAsFixed(2)}',
+                                  'СУММА:     ${NumberFormat('#,##0.00', 'ru_RU').format(_calculateTotal())}',
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 20),
+                                      color: Colors.black,
+                                      fontSize: screenHeight * 0.04),
                                 ),
                               ),
                             ),
