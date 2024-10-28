@@ -26,12 +26,6 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "clock_widget",
-      "rootUri": "file:///C:/Users/Dima/AppData/Local/Pub/Cache/hosted/pub.dev/clock_widget-0.0.4",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
-    },
-    {
       "name": "collection",
       "rootUri": "file:///C:/Users/Dima/AppData/Local/Pub/Cache/hosted/pub.dev/collection-1.18.0",
       "packageUri": "lib/",
@@ -188,7 +182,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2024-10-25T12:01:22.460716Z",
+  "generated": "2024-10-28T07:18:12.090725Z",
   "generator": "pub",
   "generatorVersion": "3.5.3",
   "flutterRoot": "file:///C:/SDK/flutter",
