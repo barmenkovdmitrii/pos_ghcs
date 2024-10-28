@@ -130,25 +130,68 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                 Row(
                   children: [
                     Expanded(
-                        child: Container(
-                            height: firstRowHeight,
-                            color: Colors.red,
-                            child: const Center(
-                                child: Text('1/3',
-                                    style: TextStyle(color: Colors.white))))),
+                      child: Container(
+                        height: firstRowHeight,
+                        color: Colors.red,
+                        child: const Center(
+                          child: Text(
+                            '1/3',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Часы в середине
                     Expanded(
-                        child: DigitalClock.light(
-                      format: "Hms",
-                      isLive: true,
-                      datetime: dateTime,
-                    )),
+                      child: DigitalClock.light(
+                        format: "Hms",
+                        isLive: true,
+                        datetime: dateTime,
+                      ),
+                    ),
                     Expanded(
-                        child: Container(
-                            height: firstRowHeight,
-                            color: Colors.blue,
-                            child: const Center(
-                                child: Text('1/3',
-                                    style: TextStyle(color: Colors.white))))),
+                      child: Container(
+                        color: Colors.blue,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment
+                              .center, // Центрируем кнопки по вертикали
+                          children: [
+                            Container(
+                              width: 80, // Ширина кнопки
+                              height: 80, // Высота кнопки
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Действие для первой кнопки
+                                },
+                                child: Text('Кнопка 1'),
+                              ),
+                            ),
+                            SizedBox(width: 10), // Отступ между кнопками
+                            Container(
+                              width: 80, // Ширина кнопки
+                              height: 80, // Высота кнопки
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Действие для второй кнопки
+                                },
+                                child: Text('Кнопка 2'),
+                              ),
+                            ),
+                            SizedBox(width: 10), // Отступ между кнопками
+                            Container(
+                              width: 80, // Ширина кнопки
+                              height: 80, // Высота кнопки
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Действие для третьей кнопки
+                                },
+                                child: Text('Кнопка 3'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 Row(
