@@ -114,12 +114,6 @@ class _PasswordInputScreenState extends State<PasswordInputScreen> {
                     isLive: true,
                     datetime: dateTime,
                   ),
-                  AnalogClock.dark(
-              width: 120,
-              height: 120,
-              isLive: true,
-              datetime: dateTime ,
-            ),
                 ],
               ),
 

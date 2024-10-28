@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:one_clock/one_clock.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -17,6 +18,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   late TabController _tabController;
   late TabController _buttonTabController;
   Map<int, int> buttonClickCounts = {};
+  DateTime dateTime = DateTime.now();
 
   @override
   void initState() {
@@ -135,12 +137,11 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                                 child: Text('1/3',
                                     style: TextStyle(color: Colors.white))))),
                     Expanded(
-                        child: Container(
-                            height: firstRowHeight,
-                            color: Colors.green,
-                            child: const Center(
-                                child: Text('1/3',
-                                    style: TextStyle(color: Colors.white))))),
+                        child: DigitalClock.light(
+                      format: "Hms",
+                      isLive: true,
+                      datetime: dateTime,
+                    )),
                     Expanded(
                         child: Container(
                             height: firstRowHeight,
@@ -237,7 +238,8 @@ class CustomTabBarView extends StatelessWidget {
   final List<List<Map<String, dynamic>>> records;
   final Function(int index, int recordIndex) onRemoveRecord;
 
-  const CustomTabBarView({super.key, 
+  const CustomTabBarView({
+    super.key,
     required this.tabController,
     required this.records,
     required this.onRemoveRecord,
@@ -263,7 +265,8 @@ class CustomListView extends StatelessWidget {
   final List<Map<String, dynamic>> records;
   final Function(int recordIndex) onRemoveRecord;
 
-  const CustomListView({super.key, 
+  const CustomListView({
+    super.key,
     required this.records,
     required this.onRemoveRecord,
   });
@@ -300,7 +303,8 @@ class TabButtonPanel extends StatelessWidget {
   final Function(int buttonIndex) onButtonClick;
   final Map<int, int> buttonClickCounts;
 
-  const TabButtonPanel({super.key, 
+  const TabButtonPanel({
+    super.key,
     required this.buttonTabController,
     required this.onButtonPressed,
     required this.onButtonClick,
@@ -403,7 +407,8 @@ class CustomButton extends StatelessWidget {
   final double buttonWidth;
   final int clickCount;
 
-  const CustomButton({super.key, 
+  const CustomButton({
+    super.key,
     required this.title,
     required this.price,
     required this.weight,
