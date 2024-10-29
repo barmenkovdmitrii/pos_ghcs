@@ -150,7 +150,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                       ),
                     ),
                     Expanded(
-                      child: BottomFirstRow(),
+                      child: ButtonFirstRow(), // Три кнопки
                     ),
                   ],
                 ),
@@ -401,7 +401,7 @@ class TabButtonPanel extends StatelessWidget {
   }
 }
 
-class BottomFirstRow extends StatelessWidget {
+class ButtonFirstRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -410,24 +410,22 @@ class BottomFirstRow extends StatelessWidget {
         mainAxisAlignment:
             MainAxisAlignment.spaceEvenly, // Равные интервалы между кнопками
         children: [
-          _buildButton('Кнопка 1', () {
-            print('Кнопка 1 нажата');
-          }),
-          _buildButton('Кнопка 2', () {
-            print('Кнопка 2 нажата');
-          }),
-          _buildButton('Кнопка 3', () {
-            print('Кнопка 3 нажата');
-          }),
+          _buildButton('Кнопка 1', () {}, context), // Пустая функция
+          _buildButton('Кнопка 2', () {}, context), // Пустая функция
+          _buildButton('Кнопка 3', () {}, context), // Пустая функция
         ],
       ),
     );
   }
 
-  Widget _buildButton(String title, VoidCallback onPressed) {
+  Widget _buildButton(
+      String title, VoidCallback onPressed, BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double buttonHeight = screenHeight * 0.09; // 9% от высоты экрана
+
     return Container(
       width: 80, // Ширина кнопки
-      height: 80, // Высота кнопки
+      height: buttonHeight, // Высота кнопки
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
