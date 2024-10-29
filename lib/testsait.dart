@@ -443,7 +443,7 @@ class ButtonFirstRow extends StatelessWidget {
   }
 }
 
-class CustomButton extends StatelessWidget {
+class CustomButton extends StatelessWidget { 
   final String title;
   final String price;
   final String weight;

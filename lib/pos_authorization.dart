@@ -3,11 +3,11 @@ import 'package:intl/intl.dart';
 import 'dart:async';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const PosAuthorization());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class PosAuthorization extends StatelessWidget {
+  const PosAuthorization({super.key});
 
   @override
   Widget build(BuildContext context) {
