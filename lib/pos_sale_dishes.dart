@@ -411,7 +411,9 @@ class ButtonFirstRow extends StatelessWidget {
             MainAxisAlignment.spaceEvenly, // Равные интервалы между кнопками
         children: [
           _buildButton('Кнопка 1', () {}, context), // Пустая функция
+          SizedBox(width: 1),
           _buildButton('Кнопка 2', () {}, context), // Пустая функция
+          SizedBox(width: 1),
           _buildButton('Кнопка 3', () {}, context), // Пустая функция
         ],
       ),
@@ -421,10 +423,12 @@ class ButtonFirstRow extends StatelessWidget {
   Widget _buildButton(
       String title, VoidCallback onPressed, BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     double buttonHeight = screenHeight * 0.09; // 9% от высоты экрана
+    double buttonWidth = screenWidth / 10;
 
     return Container(
-      width: 80, // Ширина кнопки
+      width: buttonWidth, // Ширина кнопки
       height: buttonHeight, // Высота кнопки
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(

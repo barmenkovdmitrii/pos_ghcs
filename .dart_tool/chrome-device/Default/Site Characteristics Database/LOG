@@ -1,13 +1,7 @@
-2024/10/29-16:47:00.990 11ac Reusing MANIFEST C:\Users\Dima\AppData\Local\Temp\flutter_tools.b0d7db8e\flutter_tools_chrome_device.d2cc3fdf\Default\Site Characteristics Database/MANIFEST-000001
-2024/10/29-16:47:00.992 11ac Recovering log #3
-2024/10/29-16:47:00.992 11ac Level-0 table #13: started
-2024/10/29-16:47:00.998 11ac Level-0 table #13: 551 bytes OK
-2024/10/29-16:47:00.998 11ac Recovering log #6
-2024/10/29-16:47:01.000 11ac Level-0 table #14: started
-2024/10/29-16:47:01.006 11ac Level-0 table #14: 998 bytes OK
-2024/10/29-16:47:01.007 11ac Recovering log #10
-2024/10/29-16:47:01.007 11ac Reusing old log C:\Users\Dima\AppData\Local\Temp\flutter_tools.b0d7db8e\flutter_tools_chrome_device.d2cc3fdf\Default\Site Characteristics Database/000010.log 
-2024/10/29-16:47:01.012 11ac Delete type=0 #3
-2024/10/29-16:47:01.012 11ac Delete type=2 #4
-2024/10/29-16:47:01.012 11ac Delete type=2 #6
-2024/10/29-16:47:01.012 11ac Delete type=0 #6
+2024/10/29-17:00:05.928 72a8 Reusing MANIFEST C:\Users\Dima\AppData\Local\Temp\flutter_tools.1796f948\flutter_tools_chrome_device.8d6f031c\Default\Site Characteristics Database/MANIFEST-000001
+2024/10/29-17:00:05.931 72a8 Recovering log #10
+2024/10/29-17:00:05.931 72a8 Reusing old log C:\Users\Dima\AppData\Local\Temp\flutter_tools.1796f948\flutter_tools_chrome_device.8d6f031c\Default\Site Characteristics Database/000010.log 
+2024/10/29-17:00:05.931 72a8 Delete type=0 #3
+2024/10/29-17:00:05.931 72a8 Delete type=2 #4
+2024/10/29-17:00:05.931 72a8 Delete type=2 #6
+2024/10/29-17:00:05.931 72a8 Delete type=0 #6

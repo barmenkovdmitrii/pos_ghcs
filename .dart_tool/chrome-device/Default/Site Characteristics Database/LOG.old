@@ -1,9 +1,7 @@
-2024/10/29-16:46:23.395 65c Reusing MANIFEST C:\Users\Dima\AppData\Local\Temp\flutter_tools.22d01ad1\flutter_tools_chrome_device.12918eb1\Default\Site Characteristics Database/MANIFEST-000001
-2024/10/29-16:46:23.396 41cc Compacting 4@0 + 0@1 files
-2024/10/29-16:46:23.401 41cc Generated table #11@0: 2 keys, 197 bytes
-2024/10/29-16:46:23.401 41cc Compacted 4@0 + 0@1 files => 197 bytes
-2024/10/29-16:46:23.407 41cc compacted to: files[ 0 1 0 0 0 0 0 ]
-2024/10/29-16:46:23.407 41cc Delete type=2 #4
-2024/10/29-16:46:23.407 41cc Delete type=2 #6
-2024/10/29-16:46:23.407 41cc Delete type=2 #7
-2024/10/29-16:46:23.407 41cc Delete type=2 #8
+2024/10/29-16:56:15.908 4fdc Reusing MANIFEST C:\Users\Dima\AppData\Local\Temp\flutter_tools.7b237622\flutter_tools_chrome_device.d45de117\Default\Site Characteristics Database/MANIFEST-000001
+2024/10/29-16:56:15.910 4fdc Recovering log #10
+2024/10/29-16:56:15.910 4fdc Reusing old log C:\Users\Dima\AppData\Local\Temp\flutter_tools.7b237622\flutter_tools_chrome_device.d45de117\Default\Site Characteristics Database/000010.log 
+2024/10/29-16:56:15.910 4fdc Delete type=0 #3
+2024/10/29-16:56:15.910 4fdc Delete type=2 #4
+2024/10/29-16:56:15.910 4fdc Delete type=2 #6
+2024/10/29-16:56:15.910 4fdc Delete type=0 #6
