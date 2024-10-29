@@ -150,47 +150,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                       ),
                     ),
                     Expanded(
-                      child: Container(
-                        color: Colors.blue,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment
-                              .center, // Центрируем кнопки по вертикали
-                          children: [
-                            Container(
-                              width: 80, // Ширина кнопки
-                              height: 80, // Высота кнопки
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  // Действие для первой кнопки
-                                },
-                                child: Text('Кнопка 1'),
-                              ),
-                            ),
-                            SizedBox(width: 10), // Отступ между кнопками
-                            Container(
-                              width: 80, // Ширина кнопки
-                              height: 80, // Высота кнопки
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  // Действие для второй кнопки
-                                },
-                                child: Text('Кнопка 2'),
-                              ),
-                            ),
-                            SizedBox(width: 10), // Отступ между кнопками
-                            Container(
-                              width: 80, // Ширина кнопки
-                              height: 80, // Высота кнопки
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  // Действие для третьей кнопки
-                                },
-                                child: Text('Кнопка 3'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      child: BottomFirstRow(),
                     ),
                   ],
                 ),
@@ -437,6 +397,46 @@ class TabButtonPanel extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class BottomFirstRow extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.blue,
+      child: Row(
+        mainAxisAlignment:
+            MainAxisAlignment.spaceEvenly, // Равные интервалы между кнопками
+        children: [
+          _buildButton('Кнопка 1', () {
+            print('Кнопка 1 нажата');
+          }),
+          _buildButton('Кнопка 2', () {
+            print('Кнопка 2 нажата');
+          }),
+          _buildButton('Кнопка 3', () {
+            print('Кнопка 3 нажата');
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButton(String title, VoidCallback onPressed) {
+    return Container(
+      width: 80, // Ширина кнопки
+      height: 80, // Высота кнопки
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero, // Убираем закругление
+          ),
+        ),
+        onPressed: onPressed, // Устанавливаем действие при нажатии
+        child: Text(title), // Устанавливаем текст кнопки
+      ),
     );
   }
 }

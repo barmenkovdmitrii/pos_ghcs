@@ -130,25 +130,28 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                 Row(
                   children: [
                     Expanded(
-                        child: Container(
-                            height: firstRowHeight,
-                            color: Colors.red,
-                            child: const Center(
-                                child: Text('1/3',
-                                    style: TextStyle(color: Colors.white))))),
+                      child: Container(
+                        height: firstRowHeight,
+                        color: Colors.red,
+                        child: const Center(
+                          child: Text(
+                            '1/3',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Часы в середине
                     Expanded(
-                        child: DigitalClock.light(
-                      format: "Hms",
-                      isLive: true,
-                      datetime: dateTime,
-                    )),
+                      child: DigitalClock.light(
+                        format: "Hms",
+                        isLive: true,
+                        datetime: dateTime,
+                      ),
+                    ),
                     Expanded(
-                        child: Container(
-                            height: firstRowHeight,
-                            color: Colors.blue,
-                            child: const Center(
-                                child: Text('1/3',
-                                    style: TextStyle(color: Colors.white))))),
+                      child: BottomFirstRow(),
+                    ),
                   ],
                 ),
                 Row(
@@ -394,6 +397,46 @@ class TabButtonPanel extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class BottomFirstRow extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.blue,
+      child: Row(
+        mainAxisAlignment:
+            MainAxisAlignment.spaceEvenly, // Равные интервалы между кнопками
+        children: [
+          _buildButton('Кнопка 1', () {
+            print('Кнопка 1 нажата');
+          }),
+          _buildButton('Кнопка 2', () {
+            print('Кнопка 2 нажата');
+          }),
+          _buildButton('Кнопка 3', () {
+            print('Кнопка 3 нажата');
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButton(String title, VoidCallback onPressed) {
+    return Container(
+      width: 80, // Ширина кнопки
+      height: 80, // Высота кнопки
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero, // Убираем закругление
+          ),
+        ),
+        onPressed: onPressed, // Устанавливаем действие при нажатии
+        child: Text(title), // Устанавливаем текст кнопки
+      ),
     );
   }
 }
