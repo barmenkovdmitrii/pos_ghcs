@@ -402,27 +402,45 @@ class TabButtonPanel extends StatelessWidget {
                   isScrollable: true,
                   tabs: List.generate(15, (index) {
                     if (index % 2 == 0) {
-                      // Четные индексы
                       return Tab(
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.66 / 4,
-                          child: Text(
-                            'Четная кнопка ${index + 1}',
-                            style: const TextStyle(color: Colors.black),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: buttonTabController.index == index
+                                ? Colors.grey
+                                : Colors.transparent,
+                            borderRadius:
+                                BorderRadius.circular(8), // Закругление углов
+                          ),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.66 / 4,
+                            child: Center(
+                              child: Text(
+                                'Четная кнопка ${index + 1}',
+                                style: TextStyle(
+                                  color: buttonTabController.index == index
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
                           ),
                         ),
                       );
                     } else {
                       return Tab(
-                          child: SizedBox
-                              .shrink()); // Пустая вкладка для нечетных индексов
+                        child: SizedBox
+                            .shrink(), // Пустая вкладка для нечетных индексов
+                      );
                     }
                   }),
-                  indicatorColor: Colors.red,
+                  indicator: BoxDecoration(
+                    color: Colors.transparent, // Убираем стандартный индикатор
+                  ),
                 ),
               ),
+
               // Третья колонка с кнопкой "Arrow Forward"
               Container(
                 width: 48, // Фиксированная ширина для кнопки "Arrow Forward"
@@ -442,7 +460,7 @@ class TabButtonPanel extends StatelessWidget {
             children: [
               // Кнопка "Первая вкладка"
               Container(
-                width: 48, // Фиксированная ширина для кнопки "Первая вкладка"
+                width: 48, // ширина для кнопки "Первая вкладка"
                 child: IconButton(
                   icon: Icon(Icons.first_page, color: Colors.black),
                   onPressed: _onFirstTabPressed,
@@ -455,27 +473,43 @@ class TabButtonPanel extends StatelessWidget {
                   isScrollable: true,
                   tabs: List.generate(15, (index) {
                     if (index % 2 != 0) {
-                      // Нечетные индексы
                       return Tab(
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.66 / 4,
-                          child: Text(
-                            'Нечетная кнопка ${index + 1}',
-                            style: const TextStyle(color: Colors.black),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: buttonTabController.index == index
+                                ? Colors.red
+                                : Colors.transparent,
+                            borderRadius:
+                                BorderRadius.circular(1), // Закругление углов
+                          ),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.66 / 4,
+                            child: Text(
+                              'Нечетная кнопка ${index + 1}',
+                              style: TextStyle(
+                                color: buttonTabController.index == index
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                       );
                     } else {
                       return Tab(
-                          child: SizedBox
-                              .shrink()); // Пустая вкладка для четных индексов
+                        child: SizedBox
+                            .shrink(), // Пустая вкладка для четных индексов
+                      );
                     }
                   }),
-                  indicatorColor: Colors.red,
+                  indicator: BoxDecoration(
+                    color: Colors.transparent, // Убираем стандартный индикатор
+                  ),
                 ),
               ),
+
               // Кнопка "Последняя вкладка"
               Container(
                 width:
