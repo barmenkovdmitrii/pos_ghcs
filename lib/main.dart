@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'pos_authorization.dart'; // pos_authorization.dart
 
 void main() {
-  runApp(POS());
+  runApp(const POS());
 }
 
 class POS extends StatelessWidget {
+  const POS({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,7 +17,7 @@ class POS extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home:
-          PosAuthorization(), // Используем PosAuthorization из pos_authorization.dart
+          const PosAuthorization(), // Используем PosAuthorization из pos_authorization.dart
     );
   }
 }

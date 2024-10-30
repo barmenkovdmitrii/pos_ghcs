@@ -410,18 +410,18 @@ class ButtonFirstRow extends StatelessWidget {
         mainAxisAlignment:
             MainAxisAlignment.spaceEvenly, // Равные интервалы между кнопками
         children: [
-          _buildButton('Кнопка 1', () {}, context), // Пустая функция
+          _buildButton(Icons.home, () {}, context), // Пустая функция
           SizedBox(width: 1),
-          _buildButton('Кнопка 2', () {}, context), // Пустая функция
+          _buildButton(Icons.search, () {}, context), // Пустая функция
           SizedBox(width: 1),
-          _buildButton('Кнопка 3', () {}, context), // Пустая функция
+          _buildButton(Icons.settings, () {}, context), // Пустая функция
         ],
       ),
     );
   }
 
   Widget _buildButton(
-      String title, VoidCallback onPressed, BuildContext context) {
+      IconData icon, VoidCallback onPressed, BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double buttonHeight = screenHeight * 0.09; // 9% от высоты экрана
@@ -437,13 +437,17 @@ class ButtonFirstRow extends StatelessWidget {
           ),
         ),
         onPressed: onPressed, // Устанавливаем действие при нажатии
-        child: Text(title), // Устанавливаем текст кнопки
+        child: Icon(
+          icon,
+          size: buttonHeight,
+          color: Colors.black,
+        ), // Устанавливаем иконку кнопки
       ),
     );
   }
 }
 
-class CustomButton extends StatelessWidget { 
+class CustomButton extends StatelessWidget {
   final String title;
   final String price;
   final String weight;
