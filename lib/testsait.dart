@@ -199,14 +199,8 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                             // Добавляем новую строку
                             Container(
                               height: firstRowHeight, // 10% от высоты экрана
-                              color: Colors.lightBlue,
-                              child: const Center(
-                                child: Text(
-                                  'Дополнительная строка',
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 20),
-                                ),
-                              ),
+                              //color: Colors.lightBlue,
+                              child: ButtonFooterRow(),
                             ),
                           ],
                         ),
@@ -446,6 +440,89 @@ class ButtonFirstRow extends StatelessWidget {
           size: buttonHeight,
           color: Colors.grey,
         ), // Устанавливаем иконку кнопки
+      ),
+    );
+  }
+}
+
+class ButtonFooterRow extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1, // Первая кнопка занимает 1/3
+            child: _buildButton(
+                Icons.thumbs_up_down, () {}, context), // Пустая функция
+          ),
+          SizedBox(width: 8), // Расстояние между кнопками
+          Expanded(
+            flex: 2, // Вторая кнопка занимает 2/3
+            child: _buildPaymentButton(() {}, context), // Пустая функция
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButton(
+      IconData icon, VoidCallback onPressed, BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double buttonHeight = screenHeight * 0.09; // 9% от высоты экрана
+
+    return Container(
+      height: buttonHeight, // Высота кнопки
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero, // Убираем закругление
+          ),
+        ),
+        onPressed: onPressed, // Устанавливаем действие при нажатии
+        child: Icon(
+          icon,
+          size: buttonHeight * 0.5, // Устанавливаем размер иконки
+          color: Colors.grey,
+        ), // Устанавливаем иконку кнопки
+      ),
+    );
+  }
+
+  Widget _buildPaymentButton(VoidCallback onPressed, BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double buttonHeight = screenHeight * 0.09; // 9% от высоты экрана
+
+    return Container(
+      height: buttonHeight, // Высота кнопки
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor:
+              Colors.red.shade900, // Устанавливаем цвет кнопки в красный
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero, // Убираем закругление
+          ),
+        ),
+        onPressed: onPressed, // Устанавливаем действие при нажатии
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center, // Центрируем содержимое
+          children: [
+            Icon(
+              Icons.payments, // Иконка слева
+              size: buttonHeight * 0.5, // Устанавливаем размер иконки
+              color: Colors.white, // Устанавливаем цвет иконки в белый
+            ),
+            SizedBox(width: 8), // Расстояние между иконкой и текстом
+            Text(
+              '    ОПЛАТА', // Текст кнопки
+              style: TextStyle(
+                fontSize: buttonHeight * 0.3, // Устанавливаем размер текста
+                color: Colors.white, // Устанавливаем цвет текста в белый
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
