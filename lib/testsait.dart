@@ -210,7 +210,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                       flex: 2,
                       child: Container(
                         height: secondRowHeight,
-                        color: Colors.purple,
+                        color: Colors.white, // фон под кнопками 6х6
                         child: TabButtonPanel(
                           buttonTabController: _buttonTabController,
                           onButtonPressed: (title, price, buttonIndex) {
@@ -313,15 +313,28 @@ class TabButtonPanel extends StatelessWidget {
   });
 
   void _onArrowForwardPressed() {
-    if (buttonTabController.index < buttonTabController.length - 1) {
-      buttonTabController.animateTo(buttonTabController.index + 1);
+    int newIndex = buttonTabController.index + 4;
+    if (newIndex >= buttonTabController.length) {
+      newIndex = buttonTabController.length -
+          1; // Перемещение не должно выходить за пределы
     }
+    buttonTabController.animateTo(newIndex);
   }
 
   void _onArrowBackPressed() {
-    if (buttonTabController.index > 0) {
-      buttonTabController.animateTo(buttonTabController.index - 1);
+    int newIndex = buttonTabController.index - 4;
+    if (newIndex < 0) {
+      newIndex = 0; // Перемещение не должно выходить за пределы
     }
+    buttonTabController.animateTo(newIndex);
+  }
+
+  void _onFirstTabPressed() {
+    buttonTabController.animateTo(0);
+  }
+
+  void _onLastTabPressed() {
+    buttonTabController.animateTo(buttonTabController.length - 1);
   }
 
   @override
@@ -331,6 +344,9 @@ class TabButtonPanel extends StatelessWidget {
 
     double buttonHeight = (screenHeight * 0.77) / 6;
     double buttonWidth = (screenWidth * 0.64) / 6;
+    double tabBarHeight = screenHeight * 0.05; // Высота одного TabBar
+    double buttonContainerHeight =
+        screenHeight * 0.05; // Высота кнопок 10% от высоты экрана
 
     return Column(
       children: [
@@ -366,16 +382,21 @@ class TabButtonPanel extends StatelessWidget {
           ),
         ),
         // Row для кнопок и TabBar
-        Row(
-          children: [
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: _onArrowBackPressed,
-            ),
-            Expanded(
-              child: Container(
-                height: screenHeight * 0.05, // 5% от высоты экрана для TabBar
-                color: Colors.blue, // Цвет фона для TabBar
+        Container(
+          height: buttonContainerHeight, // Высота кнопок 10% от высоты экрана
+          color: Colors.green.shade50, // Цвет фона для кнопок
+          child: Row(
+            children: [
+              // Первая колонка с кнопкой "Arrow Back"
+              Container(
+                width: 48, // Фиксированная ширина для кнопки "Arrow Back"
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+                  onPressed: _onArrowBackPressed,
+                ),
+              ),
+              // Вторая колонка с TabBar
+              Expanded(
                 child: TabBar(
                   controller: buttonTabController,
                   isScrollable: true,
@@ -387,7 +408,7 @@ class TabButtonPanel extends StatelessWidget {
                           width: MediaQuery.of(context).size.width * 0.66 / 4,
                           child: Text(
                             'Четная кнопка ${index + 1}',
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.black),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -399,44 +420,72 @@ class TabButtonPanel extends StatelessWidget {
                               .shrink()); // Пустая вкладка для нечетных индексов
                     }
                   }),
-                  indicatorColor: Colors.white,
+                  indicatorColor: Colors.red,
                 ),
               ),
-            ),
-            IconButton(
-              icon: Icon(Icons.arrow_forward),
-              onPressed: _onArrowForwardPressed,
-            ),
-          ],
+              // Третья колонка с кнопкой "Arrow Forward"
+              Container(
+                width: 48, // Фиксированная ширина для кнопки "Arrow Forward"
+                child: IconButton(
+                  icon: Icon(Icons.arrow_forward_ios, color: Colors.black),
+                  onPressed: _onArrowForwardPressed,
+                ),
+              ),
+            ],
+          ),
         ),
         // Нижняя TabBar для нечетных индексов
         Container(
-          height: screenHeight * 0.05, // 5% от высоты экрана для TabBar
-          color: Colors.blue, // Цвет фона для TabBar
-          child: TabBar(
-            controller: buttonTabController,
-            isScrollable: true,
-            tabs: List.generate(15, (index) {
-              if (index % 2 != 0) {
-                // Нечетные индексы
-                return Tab(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.66 / 4,
-                    child: Text(
-                      'Нечетная кнопка ${index + 1}',
-                      style: const TextStyle(color: Colors.white),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                );
-              } else {
-                return Tab(
-                    child: SizedBox
-                        .shrink()); // Пустая вкладка для четных индексов
-              }
-            }),
-            indicatorColor: Colors.white,
+          height: tabBarHeight, // Высота одного TabBar
+          color: Colors.green.shade50, // Цвет фона для TabBar
+          child: Row(
+            children: [
+              // Кнопка "Первая вкладка"
+              Container(
+                width: 48, // Фиксированная ширина для кнопки "Первая вкладка"
+                child: IconButton(
+                  icon: Icon(Icons.first_page, color: Colors.black),
+                  onPressed: _onFirstTabPressed,
+                ),
+              ),
+              // Вторая колонка с TabBar
+              Expanded(
+                child: TabBar(
+                  controller: buttonTabController,
+                  isScrollable: true,
+                  tabs: List.generate(15, (index) {
+                    if (index % 2 != 0) {
+                      // Нечетные индексы
+                      return Tab(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.66 / 4,
+                          child: Text(
+                            'Нечетная кнопка ${index + 1}',
+                            style: const TextStyle(color: Colors.black),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Tab(
+                          child: SizedBox
+                              .shrink()); // Пустая вкладка для четных индексов
+                    }
+                  }),
+                  indicatorColor: Colors.red,
+                ),
+              ),
+              // Кнопка "Последняя вкладка"
+              Container(
+                width:
+                    48, // Фиксированная ширина для кнопки "Последняя вкладка"
+                child: IconButton(
+                  icon: Icon(Icons.last_page, color: Colors.black),
+                  onPressed: _onLastTabPressed,
+                ),
+              ),
+            ],
           ),
         ),
       ],
