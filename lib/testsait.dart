@@ -312,12 +312,24 @@ class TabButtonPanel extends StatelessWidget {
     required this.buttonClickCounts,
   });
 
+  void _onArrowForwardPressed() {
+    if (buttonTabController.index < buttonTabController.length - 1) {
+      buttonTabController.animateTo(buttonTabController.index + 1);
+    }
+  }
+
+  void _onArrowBackPressed() {
+    if (buttonTabController.index > 0) {
+      buttonTabController.animateTo(buttonTabController.index - 1);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
-    double buttonHeight = (screenHeight * 0.80) / 6;
+    double buttonHeight = (screenHeight * 0.77) / 6;
     double buttonWidth = (screenWidth * 0.64) / 6;
 
     return Column(
@@ -353,46 +365,79 @@ class TabButtonPanel extends StatelessWidget {
             }),
           ),
         ),
+        // Row для кнопок и TabBar
         Row(
           children: [
             IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                if (buttonTabController.index > 0) {
-                  buttonTabController.animateTo(buttonTabController.index - 1);
-                }
-              },
+              icon: Icon(Icons.arrow_back),
+              onPressed: _onArrowBackPressed,
             ),
             Expanded(
-              child: TabBar(
-                controller: buttonTabController,
-                isScrollable: true,
-                tabs: List.generate(15, (index) {
-                  return Tab(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.66 / 4,
-                      child: Text(
-                        'Кнопки с длинной надписью что бы было ${index + 1}',
-                        style: const TextStyle(color: Colors.white),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  );
-                }),
-                indicatorColor: Colors.white,
+              child: Container(
+                height: screenHeight * 0.05, // 5% от высоты экрана для TabBar
+                color: Colors.blue, // Цвет фона для TabBar
+                child: TabBar(
+                  controller: buttonTabController,
+                  isScrollable: true,
+                  tabs: List.generate(15, (index) {
+                    if (index % 2 == 0) {
+                      // Четные индексы
+                      return Tab(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.66 / 4,
+                          child: Text(
+                            'Четная кнопка ${index + 1}',
+                            style: const TextStyle(color: Colors.white),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Tab(
+                          child: SizedBox
+                              .shrink()); // Пустая вкладка для нечетных индексов
+                    }
+                  }),
+                  indicatorColor: Colors.white,
+                ),
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.arrow_forward),
-              onPressed: () {
-                if (buttonTabController.index <
-                    buttonTabController.length - 1) {
-                  buttonTabController.animateTo(buttonTabController.index + 1);
-                }
-              },
+              icon: Icon(Icons.arrow_forward),
+              onPressed: _onArrowForwardPressed,
             ),
           ],
+        ),
+        // Нижняя TabBar для нечетных индексов
+        Container(
+          height: screenHeight * 0.05, // 5% от высоты экрана для TabBar
+          color: Colors.blue, // Цвет фона для TabBar
+          child: TabBar(
+            controller: buttonTabController,
+            isScrollable: true,
+            tabs: List.generate(15, (index) {
+              if (index % 2 != 0) {
+                // Нечетные индексы
+                return Tab(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.66 / 4,
+                    child: Text(
+                      'Нечетная кнопка ${index + 1}',
+                      style: const TextStyle(color: Colors.white),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                );
+              } else {
+                return Tab(
+                    child: SizedBox
+                        .shrink()); // Пустая вкладка для четных индексов
+              }
+            }),
+            indicatorColor: Colors.white,
+          ),
         ),
       ],
     );
@@ -437,7 +482,7 @@ class ButtonFirstRow extends StatelessWidget {
         onPressed: onPressed, // Устанавливаем действие при нажатии
         child: Icon(
           icon,
-          size: buttonHeight,
+          size: buttonHeight * 0.5,
           color: Colors.grey,
         ), // Устанавливаем иконку кнопки
       ),
@@ -496,32 +541,37 @@ class ButtonFooterRow extends StatelessWidget {
 
     return Container(
       height: buttonHeight, // Высота кнопки
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor:
-              Colors.red.shade900, // Устанавливаем цвет кнопки в красный
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero, // Убираем закругление
+      child: Material(
+        color: Colors.red.shade900, // Устанавливаем цвет кнопки в красный
+        borderRadius: BorderRadius.zero, // Убираем закругление
+        child: InkWell(
+          onTap: onPressed, // Устанавливаем действие при нажатии
+          borderRadius: BorderRadius.zero, // Убираем закругление
+          splashColor: Colors.white.withOpacity(0.5), // Цвет эффекта нажатия
+          highlightColor: Colors.white.withOpacity(0.3), // Цвет при нажатии
+          child: Container(
+            height: buttonHeight, // Высота кнопки
+            alignment: Alignment.center, // Центрируем содержимое
+            child: Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.center, // Центрируем содержимое
+              children: [
+                Icon(
+                  Icons.payments, // Иконка слева
+                  size: buttonHeight * 0.5, // Устанавливаем размер иконки
+                  color: Colors.white, // Устанавливаем цвет иконки в белый
+                ),
+                SizedBox(width: 8), // Расстояние между иконкой и текстом
+                Text(
+                  'ОПЛАТА', // Текст кнопки
+                  style: TextStyle(
+                    fontSize: buttonHeight * 0.3, // Устанавливаем размер текста
+                    color: Colors.white, // Устанавливаем цвет текста в белый
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        onPressed: onPressed, // Устанавливаем действие при нажатии
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center, // Центрируем содержимое
-          children: [
-            Icon(
-              Icons.payments, // Иконка слева
-              size: buttonHeight * 0.5, // Устанавливаем размер иконки
-              color: Colors.white, // Устанавливаем цвет иконки в белый
-            ),
-            SizedBox(width: 8), // Расстояние между иконкой и текстом
-            Text(
-              '    ОПЛАТА', // Текст кнопки
-              style: TextStyle(
-                fontSize: buttonHeight * 0.3, // Устанавливаем размер текста
-                color: Colors.white, // Устанавливаем цвет текста в белый
-              ),
-            ),
-          ],
         ),
       ),
     );
