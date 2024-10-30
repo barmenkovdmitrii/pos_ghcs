@@ -143,10 +143,14 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                     ),
                     // Часы в середине
                     Expanded(
-                      child: DigitalClock.light(
-                        format: "Hms",
-                        isLive: true,
-                        datetime: dateTime,
+                      child: Container(
+                        height: firstRowHeight,
+                        color: Colors.white,
+                        child: DigitalClock.light(
+                          format: "Hms",
+                          isLive: true,
+                          datetime: dateTime,
+                        ),
                       ),
                     ),
                     Expanded(
@@ -405,16 +409,16 @@ class ButtonFirstRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue,
+      color: Colors.white,
       child: Row(
         mainAxisAlignment:
             MainAxisAlignment.spaceEvenly, // Равные интервалы между кнопками
         children: [
-          _buildButton(Icons.home, () {}, context), // Пустая функция
+          _buildButton(Icons.apps, () {}, context), // Пустая функция
           SizedBox(width: 1),
-          _buildButton(Icons.search, () {}, context), // Пустая функция
+          _buildButton(Icons.dehaze, () {}, context), // Пустая функция
           SizedBox(width: 1),
-          _buildButton(Icons.settings, () {}, context), // Пустая функция
+          _buildButton(Icons.lock, () {}, context), // Пустая функция
         ],
       ),
     );
@@ -440,7 +444,7 @@ class ButtonFirstRow extends StatelessWidget {
         child: Icon(
           icon,
           size: buttonHeight,
-          color: Colors.black,
+          color: Colors.grey,
         ), // Устанавливаем иконку кнопки
       ),
     );

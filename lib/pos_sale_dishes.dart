@@ -143,10 +143,14 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                     ),
                     // Часы в середине
                     Expanded(
-                      child: DigitalClock.light(
-                        format: "Hms",
-                        isLive: true,
-                        datetime: dateTime,
+                      child: Container(
+                        height: firstRowHeight,
+                        color: Colors.white,
+                        child: DigitalClock.light(
+                          format: "Hms",
+                          isLive: true,
+                          datetime: dateTime,
+                        ),
                       ),
                     ),
                     Expanded(
@@ -405,23 +409,23 @@ class ButtonFirstRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue,
+      color: Colors.white,
       child: Row(
         mainAxisAlignment:
             MainAxisAlignment.spaceEvenly, // Равные интервалы между кнопками
         children: [
-          _buildButton('Кнопка 1', () {}, context), // Пустая функция
+          _buildButton(Icons.apps, () {}, context), // Пустая функция
           SizedBox(width: 1),
-          _buildButton('Кнопка 2', () {}, context), // Пустая функция
+          _buildButton(Icons.dehaze, () {}, context), // Пустая функция
           SizedBox(width: 1),
-          _buildButton('Кнопка 3', () {}, context), // Пустая функция
+          _buildButton(Icons.lock, () {}, context), // Пустая функция
         ],
       ),
     );
   }
 
   Widget _buildButton(
-      String title, VoidCallback onPressed, BuildContext context) {
+      IconData icon, VoidCallback onPressed, BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double buttonHeight = screenHeight * 0.09; // 9% от высоты экрана
@@ -437,7 +441,11 @@ class ButtonFirstRow extends StatelessWidget {
           ),
         ),
         onPressed: onPressed, // Устанавливаем действие при нажатии
-        child: Text(title), // Устанавливаем текст кнопки
+        child: Icon(
+          icon,
+          size: buttonHeight,
+          color: Colors.grey,
+        ), // Устанавливаем иконку кнопки
       ),
     );
   }
