@@ -484,15 +484,17 @@ class TabButtonPanel extends StatelessWidget {
                           ),
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width * 0.66 / 4,
-                            child: Text(
-                              'Нечетная кнопка ${index + 1}',
-                              style: TextStyle(
-                                color: buttonTabController.index == index
-                                    ? Colors.white
-                                    : Colors.black,
+                            child: Center(
+                              child: Text(
+                                'Нечетная кнопка ${index + 1}',
+                                style: TextStyle(
+                                  color: buttonTabController.index == index
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ),
