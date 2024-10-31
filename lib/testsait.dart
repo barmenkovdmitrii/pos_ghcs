@@ -406,7 +406,7 @@ class TabButtonPanel extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             color: buttonTabController.index == index
-                                ? Colors.grey
+                                ? Colors.grey // цвет выделения вкладки
                                 : Colors.transparent,
                             borderRadius:
                                 BorderRadius.circular(8), // Закругление углов
@@ -477,10 +477,10 @@ class TabButtonPanel extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             color: buttonTabController.index == index
-                                ? Colors.red
+                                ? Colors.grey
                                 : Colors.transparent,
                             borderRadius:
-                                BorderRadius.circular(1), // Закругление углов
+                                BorderRadius.circular(8), // Закругление углов
                           ),
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width * 0.66 / 4,
@@ -736,12 +736,12 @@ class CustomButton extends StatelessWidget {
                 ),
               ),
             ),
-            if (clickCount > 0)
+            if (clickCount > 0) // Количество нажатий с право в верху
               Positioned(
-                top: 10,
-                right: 10,
+                top: 3, // Отступ для индикатора сверху
+                right: 3, // Отступ для индикатора с право
                 child: Container(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4.0), // Отступы внутри красного
                   decoration: BoxDecoration(
                     color: Colors.red,
                     borderRadius: BorderRadius.circular(10),
