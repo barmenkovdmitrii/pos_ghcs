@@ -285,7 +285,7 @@ class CustomListView extends StatelessWidget {
         return ListTile(
           title: Text('Кнопка: ${records[recordIndex]['title']}'),
           subtitle: Text(
-              'Цена: ${records[recordIndex]['price']}, Количество: $count, Итог: ${total.toStringAsFixed(2)}'),
+              'Цена: ${records[recordIndex]['price']},    X $count, Сумма: ${total.toStringAsFixed(2)}'),
           trailing: IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
             onPressed: () {
